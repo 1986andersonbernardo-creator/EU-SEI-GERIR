@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Calculadora de Ganhos</title>
+    <link rel="icon" type="image/png" href="img/ChatGPT Image 29 de jun. de 2026, 17_29_58.png">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tela Início -->
+        <div class="screen active" id="homeScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-calculator"></i> EU SEI GERIR</h1>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </header>
+
+            <div class="screen-content">
+                <!-- Card Principal - Total do Mês -->
+                <div class="dashboard-main-card">
+                    <div class="card-icon-img">
+                        <img src="img/ChatGPT Image 29 de jun. de 2026, 17_29_58.png" alt="Calculadora">
+                    </div>
+                    <div class="card-content">
+                        <h3>Total Recebido no Mês</h3>
+                        <p class="main-value" id="monthlyTotal">R$ 0,00</p>
+                        <span class="card-subtitle">Atualizado em tempo real</span>
+                    </div>
+                </div>
+
+                <!-- Card de Motivação -->
+                <div class="motivation-card">
+                    <div class="motivation-header">
+                        <div class="motivation-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Dica do Dia</h3>
+                    </div>
+                    <div class="motivation-content">
+                        <p class="motivation-text" id="motivationText">
+                            Cada real economizado hoje aproxima você dos seus sonhos.
+                        </p>
+                        <button class="btn-motivation" id="newMotivationBtn">
+                            <i class="fas fa-sync-alt"></i> Nova Mensagem
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Último Cálculo -->
+                <div class="card" id="lastCalculationCard">
+                    <div class="card-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h2>Última Divisão</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="result-item">
+                            <span class="label">🏠 Necessidades</span>
+                            <span class="value" id="needsValue">R$ 0,00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">🎉 Desejos</span>
+                            <span class="value" id="wantsValue">R$ 0,00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">💰 Investimentos</span>
+                            <span class="value" id="savingsValue">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meta em Andamento -->
+                <div class="card" id="activeGoalCard">
+                    <div class="card-header">
+                        <i class="fas fa-bullseye"></i>
+                        <h2>Meta em Andamento</h2>
+                    </div>
+                    <div class="card-content" id="activeGoalContent">
+                        <p class="empty-message">Nenhuma meta ativa</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Ganhos -->
+        <div class="screen" id="incomeScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-dollar-sign"></i> Ganhos</h1>
+            </header>
+
+            <div class="screen-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Novo Cálculo</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="form-group">
+                            <label for="amount">Valor Recebido (R$)</label>
+                            <input type="number" id="amount" placeholder="Ex: 5000.00" step="0.01" min="0" inputmode="decimal">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="incomeType">Tipo de Ganho</label>
+                            <select id="incomeType">
+                                <option value="daily">Diário</option>
+                                <option value="weekly">Semanal</option>
+                                <option value="biweekly">Quinzenal</option>
+                                <option value="monthly" selected>Mensal</option>
+                                <option value="other">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="divisionMethod">Método de Divisão</label>
+                            <select id="divisionMethod">
+                                <option value="50-30-20">50 / 30 / 20</option>
+                                <option value="60-20-20">60 / 20 / 20</option>
+                                <option value="70-20-10">70 / 20 / 10</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+
+                        <div id="customInputs" class="custom-inputs hidden">
+                            <div class="form-group">
+                                <label>Necessidades (%)</label>
+                                <input type="number" id="customNeeds" placeholder="50" min="0" max="100" value="50">
+                            </div>
+                            <div class="form-group">
+                                <label>Desejos (%)</label>
+                                <input type="number" id="customWants" placeholder="30" min="0" max="100" value="30">
+                            </div>
+                            <div class="form-group">
+                                <label>Investimentos (%)</label>
+                                <input type="number" id="customSavings" placeholder="20" min="0" max="100" value="20">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Data</label>
+                            <input type="date" id="date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Descrição (opcional)</label>
+                            <input type="text" id="description" placeholder="Ex: Salário">
+                        </div>
+
+                        <button class="btn-primary" id="calculateBtn">
+                            <i class="fas fa-calculator"></i> Calcular
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Resultado -->
+                <div class="card hidden" id="resultCard">
+                    <div class="card-header">
+                        <h2>Resultado</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="chart-container">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+
+                        <div class="results-cards">
+                            <div class="result-card needs">
+                                <div class="result-card-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="result-card-content">
+                                    <p class="label">Necessidades</p>
+                                    <p class="value" id="needsValueCard">R$ 0,00</p>
+                                    <p class="percentage" id="needsPercent">0%</p>
+                                </div>
+                            </div>
+
+                            <div class="result-card wants">
+                                <div class="result-card-icon">
+                                    <i class="fas fa-party-horn"></i>
+                                </div>
+                                <div class="result-card-content">
+                                    <p class="label">Desejos</p>
+                                    <p class="value" id="wantsValueCard">R$ 0,00</p>
+                                    <p class="percentage" id="wantsPercent">0%</p>
+                                </div>
+                            </div>
+
+                            <div class="result-card savings">
+                                <div class="result-card-icon">
+                                    <i class="fas fa-piggy-bank"></i>
+                                </div>
+                                <div class="result-card-content">
+                                    <p class="label">Investimentos</p>
+                                    <p class="value" id="savingsValueCard">R$ 0,00</p>
+                                    <p class="percentage" id="savingsPercent">0%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="progress-bars">
+                            <div class="progress-item">
+                                <div class="progress-bar">
+                                    <div class="progress-fill needs" id="needsBar"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-bar">
+                                    <div class="progress-fill wants" id="wantsBar"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-bar">
+                                    <div class="progress-fill savings" id="savingsBar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert-container" id="alertContainer"></div>
+
+                        <div class="action-buttons">
+                            <button class="btn-secondary" id="copyBtn">
+                                <i class="fas fa-copy"></i> Copiar
+                            </button>
+                            <button class="btn-whatsapp" id="whatsappBtn">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                            <button class="btn-pdf" id="pdfBtn">
+                                <i class="fas fa-file-pdf"></i> PDF
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Metas -->
+        <div class="screen" id="goalsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-bullseye"></i> Metas</h1>
+                <button class="btn-add" id="addGoalBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </header>
+
+            <div class="screen-content">
+                <!-- Dashboard -->
+                <div class="dashboard-cards">
+                    <div class="dashboard-card">
+                        <i class="fas fa-trophy"></i>
+                        <p class="dashboard-value" id="totalGoals">0</p>
+                        <p class="dashboard-label">Total</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <i class="fas fa-check"></i>
+                        <p class="dashboard-value" id="completedGoals">0</p>
+                        <p class="dashboard-label">Concluídas</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <i class="fas fa-piggy-bank"></i>
+                        <p class="dashboard-value" id="totalSaved">R$ 0</p>
+                        <p class="dashboard-label">Economizado</p>
+                    </div>
+                    <div class="dashboard-card">
+                        <i class="fas fa-clock"></i>
+                        <p class="dashboard-value" id="nextGoal">-</p>
+                        <p class="dashboard-label">Próxima</p>
+                    </div>
+                </div>
+
+                <!-- Lista de Metas -->
+                <div class="goals-list" id="goalsList">
+                    <p class="empty-message">Nenhuma meta cadastrada</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Histórico -->
+        <div class="screen" id="historyScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-history"></i> Histórico</h1>
+                <button class="btn-small-danger" id="clearHistoryBtn">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </header>
+
+            <div class="screen-content">
+                <div class="history-list" id="historyList">
+                    <p class="empty-message">Nenhum cálculo realizado</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Configurações -->
+        <div class="screen" id="settingsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-cog"></i> Config</h1>
+            </header>
+
+            <div class="screen-content">
+                <div class="settings-group">
+                    <h3>Metas Padrão</h3>
+                    
+                    <div class="form-group">
+                        <label for="emergencyGoal">Reserva de Emergência (R$)</label>
+                        <input type="number" id="emergencyGoal" placeholder="Ex: 10000" step="0.01" min="0" inputmode="decimal">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="investmentGoal">Investimentos (R$)</label>
+                        <input type="number" id="investmentGoal" placeholder="Ex: 20000" step="0.01" min="0" inputmode="decimal">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="purchaseGoal">Compras Futuras (R$)</label>
+                        <input type="number" id="purchaseGoal" placeholder="Ex: 5000" step="0.01" min="0" inputmode="decimal">
+                    </div>
+
+                    <button class="btn-primary" id="saveSettingsBtn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+
+                <div class="settings-group">
+                    <h3>Sobre</h3>
+                    <p class="settings-info">Calculadora de Ganhos v1.0</p>
+                    <p class="settings-info">Desenvolvido para ajudar no controle financeiro pessoal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Barra de Navegação -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-screen="homeScreen">
+                <i class="fas fa-home"></i>
+                <span>Início</span>
+            </button>
+            <button class="nav-item" data-screen="incomeScreen">
+                <i class="fas fa-dollar-sign"></i>
+                <span>Ganhos</span>
+            </button>
+            <button class="nav-item" data-screen="goalsScreen">
+                <i class="fas fa-bullseye"></i>
+                <span>Metas</span>
+            </button>
+            <button class="nav-item" data-screen="historyScreen">
+                <i class="fas fa-history"></i>
+                <span>Histórico</span>
+            </button>
+            <button class="nav-item" data-screen="settingsScreen">
+                <i class="fas fa-cog"></i>
+                <span>Config</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Modal Nova Meta -->
+    <div class="modal hidden" id="goalModal">
+        <div class="modal-content">
+            <h2>Nova Meta</h2>
+            <div class="form-group">
+                <label for="goalName">Nome da Meta</label>
+                <input type="text" id="goalName" placeholder="Ex: Comprar moto">
+            </div>
+            <div class="form-group">
+                <label for="goalCategory">Categoria</label>
+                <select id="goalCategory">
+                    <option value="needs">🏠 Necessidades (50%)</option>
+                    <option value="wants">🎉 Desejos (30%)</option>
+                    <option value="savings">💰 Investimentos (20%)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="goalAmount">Valor da Meta (R$)</label>
+                <input type="number" id="goalAmount" placeholder="15000" step="0.01" min="0" inputmode="decimal">
+            </div>
+            <div class="form-group">
+                <label for="goalDate">Data Desejada</label>
+                <input type="date" id="goalDate">
+            </div>
+            <div class="form-group">
+                <label for="goalType">Tipo de Economia</label>
+                <select id="goalType">
+                    <option value="percentage">Percentual da categoria</option>
+                    <option value="fixed">Valor fixo por cálculo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="goalValue">Percentual a economizar (%)</label>
+                <input type="number" id="goalValue" placeholder="Ex: 30" min="0" max="100" inputmode="decimal">
+                <small style="color: var(--text-secondary); font-size: 0.8rem;">% do valor da categoria será destinado a esta meta</small>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveGoalBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelGoalBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Simulador -->
+    <div class="modal hidden" id="simulatorModal">
+        <div class="modal-content">
+            <h2>Simulador</h2>
+            <div id="simulatorContent"></div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="closeSimulatorBtn">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Meta -->
+    <div class="modal hidden" id="editGoalModal">
+        <div class="modal-content">
+            <h2>Editar Meta</h2>
+            <div class="form-group">
+                <label for="editGoalName">Nome</label>
+                <input type="text" id="editGoalName">
+            </div>
+            <div class="form-group">
+                <label for="editGoalCategory">Categoria</label>
+                <select id="editGoalCategory">
+                    <option value="needs">🏠 Necessidades</option>
+                    <option value="wants">🎉 Desejos</option>
+                    <option value="savings">💰 Investimentos</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editGoalAmount">Valor (R$)</label>
+                <input type="number" id="editGoalAmount" step="0.01" min="0" inputmode="decimal">
+            </div>
+            <div class="form-group">
+                <label for="editGoalDate">Data</label>
+                <input type="date" id="editGoalDate">
+            </div>
+            <div class="form-group">
+                <label for="editGoalType">Tipo</label>
+                <select id="editGoalType">
+                    <option value="percentage">Percentual</option>
+                    <option value="fixed">Valor fixo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="editGoalValue">Percentual (%)</label>
+                <input type="number" id="editGoalValue" min="0" max="100" inputmode="decimal">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveGoalEditBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelGoalEditBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Histórico -->
+    <div class="modal hidden" id="editModal">
+        <div class="modal-content">
+            <h2>Editar Cálculo</h2>
+            <div class="form-group">
+                <label>Valor (R$)</label>
+                <input type="number" id="editAmount" step="0.01" min="0" inputmode="decimal">
+            </div>
+            <div class="form-group">
+                <label>Tipo de Ganho</label>
+                <select id="editIncomeType">
+                    <option value="daily">Diário</option>
+                    <option value="weekly">Semanal</option>
+                    <option value="biweekly">Quinzenal</option>
+                    <option value="monthly">Mensal</option>
+                    <option value="other">Outro</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <input type="text" id="editDescription">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveEditBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelEditBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
