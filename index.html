@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculadora de Ganhos</title>
     <link rel="icon" type="image/png" href="img/ChatGPT Image 29 de jun. de 2026, 17_29_58.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="app-container">
@@ -50,6 +53,34 @@
                     </div>
                 </div>
 
+                <!-- Painel de Metas Resumo -->
+                <div class="card" id="goalsSummaryCard">
+                    <div class="card-header">
+                        <i class="fas fa-bullseye"></i>
+                        <h2>🎯 Suas Metas</h2>
+                    </div>
+                    <div class="card-content" id="goalsSummaryContent">
+                        <div class="goals-summary-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Metas Ativas</span>
+                                <span class="stat-value" id="activeGoalsCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total Reservado</span>
+                                <span class="stat-value" id="totalReserved">R$ 0</span>
+                            </div>
+                        </div>
+                        <div class="next-goal-info" id="nextGoalInfo">
+                            <p class="next-goal-label">Próxima Meta:</p>
+                            <p class="next-goal-name" id="nextGoalName">Nenhuma meta ativa</p>
+                            <div class="next-goal-details" id="nextGoalDetails">
+                                <span id="nextGoalRemaining">Faltam: R$ 0</span>
+                                <span id="nextGoalDays">Previsão: -</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Último Cálculo -->
                 <div class="card" id="lastCalculationCard">
                     <div class="card-header">
@@ -69,17 +100,6 @@
                             <span class="label">💰 Investimentos</span>
                             <span class="value" id="savingsValue">R$ 0,00</span>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Meta em Andamento -->
-                <div class="card" id="activeGoalCard">
-                    <div class="card-header">
-                        <i class="fas fa-bullseye"></i>
-                        <h2>Meta em Andamento</h2>
-                    </div>
-                    <div class="card-content" id="activeGoalContent">
-                        <p class="empty-message">Nenhuma meta ativa</p>
                     </div>
                 </div>
             </div>
@@ -361,7 +381,7 @@
             <h2>Nova Meta</h2>
             <div class="form-group">
                 <label for="goalName">Nome da Meta</label>
-                <input type="text" id="goalName" placeholder="Ex: Comprar moto">
+                <input type="text" id="goalName" placeholder="Ex: Aluguel, Viagem, Notebook">
             </div>
             <div class="form-group">
                 <label for="goalCategory">Categoria</label>
@@ -376,8 +396,16 @@
                 <input type="number" id="goalAmount" placeholder="15000" step="0.01" min="0" inputmode="decimal">
             </div>
             <div class="form-group">
-                <label for="goalDate">Data Desejada</label>
+                <label for="goalDate">Data Desejada (opcional)</label>
                 <input type="date" id="goalDate">
+            </div>
+            <div class="form-group">
+                <label for="goalPriority">Prioridade</label>
+                <select id="goalPriority">
+                    <option value="high">Alta</option>
+                    <option value="medium" selected>Média</option>
+                    <option value="low">Baixa</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="goalType">Tipo de Economia</label>
@@ -430,8 +458,16 @@
                 <input type="number" id="editGoalAmount" step="0.01" min="0" inputmode="decimal">
             </div>
             <div class="form-group">
-                <label for="editGoalDate">Data</label>
+                <label for="editGoalDate">Data Desejada</label>
                 <input type="date" id="editGoalDate">
+            </div>
+            <div class="form-group">
+                <label for="editGoalPriority">Prioridade</label>
+                <select id="editGoalPriority">
+                    <option value="high">Alta</option>
+                    <option value="medium">Média</option>
+                    <option value="low">Baixa</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="editGoalType">Tipo</label>
