@@ -382,7 +382,6 @@ const elements = {
     needsValue: document.getElementById('needsValue'),
     wantsValue: document.getElementById('wantsValue'),
     savingsValue: document.getElementById('savingsValue'),
-    activeGoalContent: document.getElementById('activeGoalContent'),
     amount: document.getElementById('amount'),
     incomeType: document.getElementById('incomeType'),
     divisionMethod: document.getElementById('divisionMethod'),
@@ -692,7 +691,19 @@ function updateHomeScreen() {
         elements.savingsValue.textContent = formatCurrency(last.savingsValue);
     }
     
+    const totalGoalsEl = document.getElementById('activeGoalsCount');
+    const totalReservedEl = document.getElementById('totalReserved');
+    const nextGoalNameEl = document.getElementById('nextGoalName');
+    const nextGoalRemainingEl = document.getElementById('nextGoalRemaining');
+    const nextGoalDaysEl = document.getElementById('nextGoalDays');
+
     const activeGoals = personalGoals.filter(g => g.amount - g.saved > 0);
+    if (totalGoalsEl) totalGoalsEl.textContent = String(activeGoals.length);
+    if (totalReservedEl) {
+        const totalSaved = personalGoals.reduce((sum, g) => sum + (g.saved || 0), 0);
+        totalReservedEl.textContent = formatCurrency(totalSaved);
+    }
+    
     if (activeGoals.length > 0) {
         const closest = activeGoals.reduce((closest, goal) => {
             const stats = calculateGoalStats(goal);
@@ -702,16 +713,14 @@ function updateHomeScreen() {
         
         if (closest) {
             const progress = (closest.goal.saved / closest.goal.amount) * 100;
-            elements.activeGoalContent.innerHTML = `
-                <h3>${closest.goal.name}</h3>
-                <p>Progresso: ${progress.toFixed(1)}% • Faltam: ${formatCurrency(closest.goal.amount - closest.goal.saved)}</p>
-                <div class="goal-progress-bar" style="margin-top:10px">
-                    <div class="goal-progress-fill" style="width:${progress}%">${progress.toFixed(0)}%</div>
-                </div>
-            `;
+            if (nextGoalNameEl) nextGoalNameEl.textContent = closest.goal.name;
+            if (nextGoalRemainingEl) nextGoalRemainingEl.textContent = `Faltam: ${formatCurrency(closest.goal.amount - closest.goal.saved)}`;
+            if (nextGoalDaysEl) nextGoalDaysEl.textContent = closest.daysLeft > 0 ? `${closest.daysLeft} dias` : 'Concluída';
         }
     } else {
-        elements.activeGoalContent.innerHTML = '<p class="empty-message">Nenhuma meta ativa</p>';
+        if (nextGoalNameEl) nextGoalNameEl.textContent = 'Nenhuma meta ativa';
+        if (nextGoalRemainingEl) nextGoalRemainingEl.textContent = 'Faltam: R$ 0';
+        if (nextGoalDaysEl) nextGoalDaysEl.textContent = 'Previsão: -';
     }
 }
 
