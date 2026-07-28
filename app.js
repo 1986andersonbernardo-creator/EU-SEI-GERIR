@@ -1,1207 +1,1689 @@
-// ==================== CONFIGURAÇÕES INICIAIS ====================
-const STORAGE_KEY = 'calculadoraGanhos';
+// ==================== CONFIGURAÇÕES DO APLICATIVO ====================
+const APP_CONFIG = {
+    name: 'Eu Sei Gerir',
+    version: '1.0.0',
+    url: 'https://eseigerir.app',
+    shareMessage: `💰 Estou organizando minha vida financeira usando o Eu Sei Gerir.
 
-// Biblioteca de mensagens motivacionais (300+)
-const motivationalMessages = [
-    "Cada real economizado hoje aproxima você dos seus sonhos.",
-    "Pequenos passos diários constroem grandes conquistas.",
-    "Seu futuro financeiro começa com as decisões de hoje.",
-    "Disciplina vale mais do que sorte.",
-    "Quem controla o dinheiro conquista liberdade.",
-    "Você está mais perto da sua meta do que estava ontem.",
-    "Persistência transforma metas em realidade.",
-    "Economizar hoje é investir na sua tranquilidade de amanhã.",
-    "Continue firme. Cada ganho registrado faz diferença.",
-    "Grandes resultados nascem de pequenas atitudes diárias.",
-    "O dinheiro que você guarda hoje é a segurança de amanhã.",
-    "Cada centavo poupado é um passo rumo à independência.",
-    "Sonhos não têm preço, mas têm custo. Invista neles!",
-    "A riqueza não é sobre ter muito, é sobre precisar de pouco.",
-    "Seu esforço de hoje será sua recompensa de amanhã.",
-    "Dinário, pequenos hábitos geram grandes transformações.",
-    "Você é o protagonista da sua história financeira.",
-    "Cada economia é uma semente plantada para o futuro.",
-    "O tempo está passando de qualquer forma. Use-o a seu favor.",
-    "Quem planeja o amanhã, colhe sucesso no futuro.",
-    "Sua meta está mais próxima do que imagina.",
-    "A força do hábito é mais poderosa que a força de vontade.",
-    "Cada dia é uma nova oportunidade de progredir.",
-    "Quem espera o momento perfeito, nunca começa.",
-    "O melhor investimento é em você mesmo.",
-    "Paciência e persistência são as chaves do sucesso financeiro.",
-    "Seus maiores sonhos requerem os maiores esforços.",
-    "Não espere para ter dinheiro para começar a economizar.",
-    "Cada meta alcançada é uma nova oportunidade.",
-    "O segredo do sucesso é começar antes de estar pronto.",
-    "Seu esforço de hoje é a garantia do seu futuro.",
-    "Quem investe em conhecimento, investe no próprio futuro.",
-    "O dinheiro é um ótimo servo, mas um péssimo mestre.",
-    "Disciplina é fazer o que precisa ser feito, mesmo quando não quer.",
-    "Economizar é a forma mais fácil de multiplicar o seu dinheiro.",
-    "Quem não planeja o futuro, não terá futuro.",
-    "Investir em você mesmo é o melhor retorno garantido.",
-    "O tempo é o seu maior aliado nas finanças.",
-    "Cada real investido é um passo para a liberdade financeira.",
-    "Quem transforma sonhos em metas, transforma vida em conquistas.",
-    "A felicidade não está em gastar, mas em realizar.",
-    "Conexões mais fortes do que os obstáculos.",
-    "A sua meta financeira está ao seu alcance.",
-    "Quem planta economia, colhe tranquilidade.",
-    "Comece de onde você está, use o que você tem, faça o que você pode.",
-    "Cada conquista financeira é uma vitória pessoal.",
-    "O sucesso nasce do esforço diário.",
-    "Você não precisa de muito, precisa de constância.",
-    "Economizar é um ato de amor próprio.",
-    "Quem guarda para o futuro, vive o presente sem preocupações.",
-    "O amanhã pertence a quem se prepara hoje.",
-    "Cada passo, por menor que seja, é progresso.",
-    "Seu dinheiro deve trabalhar para você, não o contrário.",
-    "A jornada de mil quilômetros começa com um único passo.",
-    "Quem tem clareza de metas, chega mais rápido aos resultados.",
-    "O dinheiro que você não gasta hoje é a liberdade de amanhã.",
-    "Persista. Todo esforço tem sua recompensa.",
-    "A melhor época para economizar foi ontem. A segunda melhor é agora.",
-    "Sonhe grande, comece pequeno, mas comece hoje.",
-    "Quem investe com sabedoria, colhe com tranquilidade.",
-    "Cada graduação financeira vem das pequenas economias diárias.",
-    "O controle do dinheiro é o controle da própria vida.",
-    "Quem aprende a poupar, aprende a viver melhor.",
-    "Sua meta financeira é o seu GPS para o sucesso.",
-    "O impossível existe apenas para os desistentes.",
-    "Economizar não é só guardar dinheiro, é construir futuro.",
-    "Quem tem metas claras, tem caminhos definidos.",
-    "A verdadeira riqueza é a paz de espírito.",
-    "Cada moeda economizada é uma prova da sua determinação.",
-    "Quem planeja, economiza. Quem economiza, conquista.",
-    "O dinheiro bem gasto traz felicidade duradoura.",
-    "A sua meta está a poucos dias de distância.",
-    "Quem investe no próprio futuro, nunca perde.",
-    "Cada novo dia é uma chance de se aproximar dos seus sonhos.",
-    "O segredo não é ganhar muito, mas gastar bem.",
-    "Quem tem dinheiro, tem opções. Quem tem opções, tem liberdade.",
-    "Economizar é multiplicar o seu poder de escolha.",
-    "A cumplicidade com o dinheiro vem da educação financeira.",
-    "Quem resiste aos gastos desnecessários, resiste ao fracasso.",
-    "Seu futuro agradece cada economia feita hoje.",
-    "Cada oportunidade de economizar é uma dádiva.",
-    "Quem investe no futuro, vive o presente com mais intensidade.",
-    "O dinheiro poupado cria margem para os imprevistos.",
-    "Quem se organiza financeiramente, vive com tranquilidade.",
-    "Cada economia é uma declaração de amor ao futuro.",
-    "A riqueza material é consequência da riqueza mental.",
-    "Quem gerencia bem o dinheiro, gerencia bem a vida.",
-    "O melhor momento para economizar é sempre.",
-    "Seu esforço de hoje será a sua tranquilidade de amanhã.",
-    "Quem não economiza agora, sofre depois.",
-    "Cada ano Controle Suas finanças",
-    "A prática de economizar traz a arte de viver bem.",
-    "Quem tem objetivos definidos tem motivação diária.",
-    "O dinheiro gasto com sabedoria gera alegrias duradouras.",
-    "Cada meta conquistada fortalece a sua disciplina.",
-    "Quem constrói reservas, constrói tranquilidade.",
-    "A sua meta está mais perto do que os seus medos dizem.",
-    "Economizar é fazer do futuro uma prioridade.",
-    "Quem vive de acordo com suas possibilidades, vive melhor.",
-    "Cada esforço conta. Por menor que pareça ser.",
-    "A melhor garantia que você pode dar a si mesmo é a independência financeira.",
-    "Quem guarda uma parte do que ganha, planta tranquilidade.",
-    "O dinheiro Briga com quem não o respeita.",
-    "O valor do dinheiro está no que ele representa de liberdade.",
-    "Quem investe em sonhos, colhe realizações.",
-    "Cada mês poupado é um mês a menos de incertezas.",
-    "Quem tem disciplina financeira tem paz de espírito.",
-    "O tempo é o seu maior aliado para multiplicar sua riqueza.",
-    "Cada decisão financeira consciente é uma vitória.",
-    "Quem economiza hoje, vive bem amanhã.",
-    "O futuro pertence aos preparados.",
-    "Economizar é a forma mais simples de ficar mais rico.",
-    "Quem define prioridades, não desperdiça oportunidades.",
-    "Sua capacidade de economizar define sua velocidade de progresso.",
-    "Cada meta alcançada inspira novas conquistas.",
-    "Quem tem foco, não se desvia das metas.",
-    "O dinheiro é um instrumento, você é o musicista.",
-    "Quem aprende a gerenciar, aprende a crescer.",
-    "Cada moeda não gasta é um passo adiante no seu caminho.",
-    "Quem resiste às tentações de consumo, constrói patrimônio.",
-    "O melhor investimento é aquele que você faz em si mesmo.",
-    "Quem poupa com sabedoria, vive com tranquilidade.",
-    "A sua meta financeira é o seu projeto de vida.",
-    "Cada prova de superação é combustível para continuar.",
-    "Quem tem metas, tem rumo. Quem tem rumo, chega lá.",
-    "Economizar é criar espaço para o que realmente importa.",
-    "O dinheiro bem cuidado gera frutos para a vida toda.",
-    "Quem domina os gastos, domina o medo do futuro.",
-    "Cada conta paga em dia é uma dívida com o futuro quitada.",
-    "Quem aprende a esperar, aprende a crescer.",
-    "A motivação para economizar vem da clareza dos seus objetivos.",
-    "Quem tem objetivos claros, não desperdiça energia com distrações.",
-    "A verdadeira riqueza é poder enfrentar imprevistos sem medo.",
-    "Cada meta define quem você vai se tornar.",
-    "Quem evita dívidas, evita preocupações.",
-    "O dinheiro é um recurso finito, use-o com sabedoria.",
-    "Quem investe com paciência, multiplica com certeza.",
-    "Cada decisão financeira correta é um degrau para o sucesso.",
-    "A consistência é mais importante do que a intensidade.",
-    "Quem planeja o futuro, vive o presente sem pressa.",
-    "O seu crescimento financeiro começa quando você assume o controle.",
-    "Quem sabe guardar, sabe investir. Quem sabe investir, sabe viver.",
-    "Cada real investido é uma semente de liberdade.",
-    "Quem tem persistência, supera qualquer obstáculo financeiro.",
-    "A meta mais importante é aquela que você não desiste.",
-    "Quem transforma sonhos em metas, transforma medo em ação.",
-    "Cada economia diária constrói uma fortaleza de tranquilidade.",
-    "Quem respeita o dinheiro, ganha o respeito da vida.",
-    "O caminho para a liberdade financeira está no dia a dia.",
-    "Quem tem disciplina, chega mais longe do que quem tem talento.",
-    "Economizar é a forma mais segura de construir patrimônio.",
-    "Quem organiza as finanças, organiza a própria vida.",
-    "Cada centavo poupado é um voto de confiança no futuro.",
-    "Quem tem metas, tem destino. Quem tem destino, chega lá.",
-    "A sua meta financeira desafia os seus limites.",
-    "Quem se preocupa com o futuro, vive o presente com mais alegria.",
-    "Cada novo mês é uma chance nova de ser mais disciplinado.",
-    "Quem domina os impulsos de consumo, domina o próprio destino.",
-    "O dinheiro bem investido gera tranquilidade para sempre.",
-    "Quem tem reservas, tem segurança. Quem tem segurança, vive melhor.",
-    "Cada objetivo financeiro é um convite à disciplina.",
-    "Quem espera o dinheiro sobrar, nunca vai ter dinheiro.",
-    "O melhor investimento é aquele que você faz agora.",
-    "Quem tem clareza financeira, vive com mais leveza.",
-    "Economizar é a arte de investir no próprio bem-estar.",
-    "Quem constrói patrimônio aos poucos, constrói liberdade rápido.",
-    "Cada dia de economia é um dia mais perto da sua realização.",
-    "Quem respeita o dinheiro, recebe o respeito da vida.",
-    "A felicidade não está no que você compra, mas no que você conquista.",
-    "Quem tem resistência emocional frente ao consumo, tem sucesso financeiro.",
-    "O melhor presente que você pode dar ao seu eu futuro é a economia de hoje.",
-    "Quem acredita no seu potencial financeiro, ultrapassa fronteiras.",
-    "Cada meta que você define hoje é um novo horizonte amanhã.",
-    "Quem investe no próprio crescimento, cresce financeiramente.",
-    "O dinheiro que você guarda é o diploma da sua maturidade.",
-    "Quem tem metas, tem esperança. Quem tem esperança, tem futuro.",
-    "Cada economia é uma ferramenta para transformar sonhos em realidade.",
-    "Quem transforma gastos impulsivos em investimentos, transforma vida.",
-    "A disciplina financeira é a ponte entre o querer e o conquistar.",
-    "Quem administra bem o dinheiro, administra bem os sentimentos.",
-    "O tempo é moeda. Gaste-o com sabedoria e ele retorna multiplicado.",
-    "Quem não economiza, não liberta. Quem não liberta, não vive.",
-    "Cada objetivo alcançado é uma prova do seu poder de superação.",
-    "Quem age hoje sobre o dinheiro, vive amanhã sem medo.",
-    "Economizar é um ato de coragem para enfrentar o futuro.",
-    "Quem resiste a compras desnecessárias, constrói paz de alma.",
-    "A sua meta financeira é o legado que você constrói para si mesmo.",
-    "Quem aprende a adiar recompensas, cresce rapidamente.",
-    "Cada centavo poupado com consciência é um passo rumo à realização.",
-    "Quem transforma rotina em ritual de economia, transforma vida.",
-    "O dinheiro Racional é o melhor conselheiro financeiro.",
-    "Quem tem metas claras, não se distrai com o supérfluo.",
-    "Economizar é a respiração do seu futuro financeiro.",
-    "Quem sonha e guarda, tem o poder de viver melhor.",
-    "Cada meta é um lembrete de quem você está se tornando.",
-    "Quem se compromete com o futuro, vive o presente sem culpa.",
-    "O verdadeiro luxo é a liberdade de não ter preocupações.",
-    "Quem guarda o dinheiro, garante os seus sonhos.",
-    "Cada economia é um voto de confiança em si mesmo.",
-    "Quem vive além do orçamento, nunca alcança a liberdade.",
-    "A melhor forma de economizar é evitar gastos desnecessários.",
-    "Quem respeita os próprios limites financeiros, ganha várias possibilidades.",
-    "Cada ano que passa é um ano a mais de experiência financeira.",
-    "Quem tem metas, vence. Quem vence, inspira.",
-    "O dinheiro não traz felicidade, mas falta de dinheiro traz tristeza.",
-    "Quem aprende a poupar, aprende a amar a si mesmo.",
-    "A sua meta é o seu farol na jornada financeira.",
-    "Quem investe na própria educação financeira, multiplica o próprio futuro.",
-    "Cada pequena economia diária transforma o seu destino.",
-    "Quem guarda uma parte do ganho, dorme tranquilo sempre.",
-    "O sucesso não é destino, é consequência de boas decisões.",
-    "Quem tem resistência para não gastar, tem força para conquistar.",
-    "Economizar é construir pontes para os seus sonhos.",
-    "Quem sabe esperar, sabe colher os melhores frutos.",
-    "Cada meta alcançada é uma nova fonte de energia para continuar.",
-    "Quem investe no futuro, colhe o hoje com mais tranquilidade.",
-    "A jornada financeira não é sobre destino, é sobre direção.",
-    "Quem cuida do dinheiro hoje, colhe tranquilidade amanhã.",
-    "Cada economia diária é uma prova do seu compromisso com o futuro.",
-    "Quem tem metas, tem razão para acordar todos os dias.",
-    "O dinheiro é um recurso renovável se bem administrado.",
-    "Quem se dedica às metas, se dedica à própria liberdade.",
-    "Não espere o dinheiro sobrar. Faça ele sobrar.",
-    "Cada meta é um lembrete das suas capacidades.",
-    "Quem aprende a dizer não aos gastos, aprende a dizer sim aos sonhos.",
-    "Economizar é cultivar o jardim da sua vida financeira.",
-    "Quem semeia economia, colhe abundância.",
-    "A verdadeira riqueza é poder fazer o que quiser quando quiser.",
-    "Quem tem clareza das metas, não se perde no caminho.",
-    "Cada mês que você economiza, você se aproxima mais dos seus sonhos.",
-    "Quem respeita o dinheiro, ganha o mundo.",
-    "O dinheiro gasto com sabedoria vira memória positiva para sempre.",
-    "Quem guarda dinheiro, guarda opções.",
-    "Economizar é o primeiro passo para transformar sonhos em realidade.",
-    "Quem não tem reserva, vive um passo atrás do medo.",
-    "A meta de hoje é a realização de amanhã.",
-    "Quem investe na educação financeira, investe em si mesmo.",
-    "Cada dia de disciplina é um degrau para o sucesso.",
-    "Quem sonha grande, começa economizando pequeno.",
-    "A sua meta está a apenas alguns dias de distância.",
-    "Quem se organiza financeiramente, vive as melhores oportunidades.",
-    "Cada real bem investido gera um futuro mais colorido.",
-    "Quem respeita o dinheiro, vive com mais propósito.",
-    "Economizar é construir o império da sua tranquilidade.",
-    "Quem tem metas, tem foco. Quem tem foco, tem sucesso.",
-    "O tempo é a moeda mais valiosa. Invista-o planejando.",
-    "Quem investe no hoje, garante o amanhã.",
-    "Cada meta alcançada é uma nova página de sucesso.",
-    "Quem tem determinação, transforma obstáculos em degraus.",
-    "Economizar é transformar escassez em abundância.",
-    "Quem guarda para o futuro, conquista liberdade no presente.",
-    "A melhor garantia contra a incerteza é a economia.",
-    "Quem administra gastos, constrói um futuro sólido.",
-    "Cada etapa do caminho é importante. Não pare agora.",
-    "Quem investe nos seus objetivos, ganha a própria vida.",
-    "O dinheiro bem usado traz felicidade para todos ao redor.",
-    "Quem economiza com alegria, vive com mais satisfação.",
-    "A sua meta está guardada para você alcançar.",
-    "Quem sonha sem medo, chega mais longe.",
-    "Economizar é escolher entre o prazer de hoje e a paz de amanhã.",
-    "Quem tem metas financeiras, vive com tranquilidade emocional.",
-    "Cada resistência ao consumo é uma prova do seu crescimento.",
-    "Quem respeita suas finanças, respeita a si mesmo.",
-    "O futuro começa agora. O que você vai fazer por ele?",
-    "Quem aprende a économizar, aprende a ser livre.",
-    "Cada meta é o início de uma nova fase de conquistas.",
-    "Quem se compromete com as finanças, se compromete com o futuro.",
-    "A sua meta é um lembrete diário do que realmente importa.",
-    "Quem investe no seu sonho, colhe realizações extraordinárias.",
-    "Cada centavo poupado é um ativo para o seu futuro.",
-    "Quem organiza as suas contas, organiza a sua vida.",
-    "Economizar é garantir que amanhã você terá mais possibilidades.",
-    "Quem cresce financeiramente, cresce em todos os aspectos.",
-    "O dinheiro é uma ferramenta. Use-a a seu favor.",
-    "Quem tem metas claras, tem paciência com o processo.",
-    "Cada decisão de economizar é um voto pela sua independência.",
-    "Quem investe com sabedoria, vive sem pressa.",
-    "A vida é curta para viver com dívidas e preocupações.",
-    "Quem aprende a gerir os ganhos, aprende a gerir a felicidade.",
-    "Cada nova economia traz uma nova chance de ser mais.",
-    "Quem guarda dinheiro, constrói horizontes mais amplos.",
-    "O seu esforço de hoje será reconhecido no futuro.",
-    "Quem transforma sonhos em economia, transforma ansiedade em realização.",
-    "Cada meta alcançada gera novas possibilidades para avançar.",
-    "Quem vive com intencionalidade financeira, vive com mais propósito.",
-    "Economizar é pilotar o próprio destino financeiro.",
-    "Quem assume o controle, nunca mais tem que pedir controle.",
-    "Cada mês de disciplina é um degrau rumo à liberdade.",
-    "Quem investe no futuro, aposenta o medo.",
-    "O dinheiro economizado traz uma felicidade mais duradoura.",
-    "Quem tem independência financeira, tem liberdade de escolha.",
-    "Cada centavo não gasto é um ato de amor ao seu eu futuro.",
-    "Quem gasta com sabedoria, vive com tranquilidade.",
-    "A meta é a estrela que guia a sua jornada financeira.",
-    "Quem guarda parte do que ganha, dorme com a consciência tranquila.",
-    "Cada dia de economia é um dia de vitória sobre o desperdício.",
-    "Quem aprende a administrar o dinheiro, aprende a administrar a vida.",
-    "Economizar é multiplicar o tempo que você tem para viver.",
-    "Quem investe em metas sólidas, constrói uma vida sólida.",
-    "A sua meta financeira é a prova do seu caráter.",
-    "Quem resiste a tentações de consumo, constrói um futuro próspero.",
-    "Cada pequena economia diária acumula grandes liberdades futuras.",
-    "Quem tem sonhos, tem metas. Quem tem metas, tem futuro.",
-    "O dinheiro bem guardado é o melhor aliado contra a adversidade.",
-    "Quem domina os impulsos de consumo, domina a própria vida.",
-    "Economizar é fazer do dinheiro um parceiro, não um inimigo.",
-    "Quem tem reserva financeira, tem reserva emocional.",
-    "Cada meta que você atinge é um passo em direção à melhor versão de si mesmo.",
-    "Quem planeja o dinheiro, planeja o futuro. Quem planeja o futuro, vive.",
-    "A sua meta não é um sonho, é um objetivo com prazo para acontecer.",
-    "Quem investe na poupança, investe na própria paz.",
-    "Cada dia que você economiza, está mais perto da realização.",
-    "Quem tem foco financeiro, tem liberdade de viver.",
-    "Economizar é transformar intenção em ação, e ação em resultado.",
-    "Quem constrói um patrimônio, constrói um legado.",
-    "A melhor forma de prever o futuro é criá-lo com suas economias.",
-    "Quem tem metas, não se perde em distrações.",
-    "Cada centavo economizado é um tijolo na sua liberdade financeira.",
-    "Quem guarda dinheiro, guarda opções para o futuro.",
-    "O esforço de economizar hoje é a prova de que você acredita em si.",
-    "Quem transforma presentes em investimentos, transforma a vida.",
-    "Cada meta alcançada fortalece a crença no seu potencial.",
-    "Quem tem metas financeiras claras, não tem tempo para desperdício.",
-    "Economizar é a forma de multiplicar as suas possibilidades.",
-    "Quem cuida do dinheiro, cuida do bem mais importante da vida.",
-    "O dinheiro é o combustível dos seus maiores projetos.",
-    "Quem investe com constância, colhe com tranquilidade.",
-    "Cada economia é um passo rumo à sua realização financeira.",
-    "Quem planeja, não se surpreende com imprevistos.",
-    "A sua meta financeira é o espelho da sua determinação.",
-    "Quem tem disciplina, faz o impossível parecer fácil.",
-    "Economizar é proteger o que ainda não aconteceu: o seu futuro.",
-    "Quem investe no hoje, garante o amanhã.",
-    "Cada mês poupado é um passo em direção aos seus maiores sonhos.",
-    "Quem define prioridades, não desperdiça energia com futilidades.",
-    "O dinheiro gasto com culpa gera apenas arrependimento.",
-    "Quem gasta com propósito, vive com mais significado.",
-    "Cada meta financeira é um lembrete de quem você quer ser.",
-    "Quem respeita o dinheiro, ganha respeito próprio.",
-    "Economizar é a base de tudo que você vai construir na vida.",
-    "Quem determina metas, direciona a própria vida.",
-    "A sua meta é o combustível para o seu desenvolvimento financeiro.",
-    "Quem investe em educação financeira, investe em liberdade.",
-    "Cada centavo economizado é um ato de fé no seu futuro.",
-    "Quem guarda parte do ganho, investe na própria tranquilidade.",
-    "Economizar é transformar receio em coragem de viver melhor.",
-    "Quem tem metas, não tem desculpas. Quem não tem metas, tem desculpas.",
-    "O valor real do dinheiro está em transformar vidas, não em acumular números.",
-    "Quem administra o dinheiro com sabedoria, vive com mais leveza.",
-    "Cada economia feita com alegria gera um futuro mais promissor.",
-    "Quem investe no próprio crescimento financeiro, cresce como pessoa.",
-    "A meta é o primeiro passo para a sua transformação financeira.",
-    "Quem não desperdiça, multiplica. Quem multiplica, prospera.",
-    "Economizar é escolher ser mais hoje, para ser ainda mais amanhã.",
-    "Quem afirma metas, afirma o seu lugar no mundo.",
-    "Cada passo na sua jornada financeira torna o caminho mais real.",
-    "Quem gasta em coisas que duram, colhe felicidade que permanece.",
-    "O dinheiro economizado é a melhor ferramenta contra a ansiedade.",
-    "Quem tem metas definidas, não tem espaço para a procrastinação.",
-    "Economizar é plantar sementes que florescem em tranquilidade.",
-    "Quem transforma gastos emocionais em investimentos racionais, transforma o destino.",
-    "Cada centavo poupado é uma diretriz que você dá à sua vida.",
-    "Quem respeita as metas financeiras, vive com mais dignidade.",
-    "A sua meta financeira é a mensagem que você manda para o seu futuro."
-];
+Ele ajuda a controlar receitas, despesas, metas financeiras e organizar o dinheiro de forma simples.
 
-let currentMotivationIndex = -1;
-
-// Elementos DOM
-const elements = {
-    navItems: document.querySelectorAll('.nav-item'),
-    screens: document.querySelectorAll('.screen'),
-    themeToggle: document.getElementById('themeToggle'),
-    totalReceived: document.getElementById('totalReceived'),
-    totalDistributed: document.getElementById('totalDistributed'),
-    totalSavings: document.getElementById('totalSavings'),
-    needsValue: document.getElementById('needsValue'),
-    wantsValue: document.getElementById('wantsValue'),
-    savingsValue: document.getElementById('savingsValue'),
-    amount: document.getElementById('amount'),
-    incomeType: document.getElementById('incomeType'),
-    divisionMethod: document.getElementById('divisionMethod'),
-    customInputs: document.getElementById('customInputs'),
-    customNeeds: document.getElementById('customNeeds'),
-    customWants: document.getElementById('customWants'),
-    customSavings: document.getElementById('customSavings'),
-    date: document.getElementById('date'),
-    description: document.getElementById('description'),
-    calculateBtn: document.getElementById('calculateBtn'),
-    resultCard: document.getElementById('resultCard'),
-    needsValueCard: document.getElementById('needsValueCard'),
-    wantsValueCard: document.getElementById('wantsValueCard'),
-    savingsValueCard: document.getElementById('savingsValueCard'),
-    needsPercent: document.getElementById('needsPercent'),
-    wantsPercent: document.getElementById('wantsPercent'),
-    savingsPercent: document.getElementById('savingsPercent'),
-    needsBar: document.getElementById('needsBar'),
-    wantsBar: document.getElementById('wantsBar'),
-    savingsBar: document.getElementById('savingsBar'),
-    alertContainer: document.getElementById('alertContainer'),
-    copyBtn: document.getElementById('copyBtn'),
-    whatsappBtn: document.getElementById('whatsappBtn'),
-    pdfBtn: document.getElementById('pdfBtn'),
-    addGoalBtn: document.getElementById('addGoalBtn'),
-    goalsList: document.getElementById('goalsList'),
-    totalGoals: document.getElementById('totalGoals'),
-    completedGoals: document.getElementById('completedGoals'),
-    totalSavedEl: document.getElementById('totalSaved'),
-    nextGoal: document.getElementById('nextGoal'),
-    clearHistoryBtn: document.getElementById('clearHistoryBtn'),
-    historyList: document.getElementById('historyList'),
-    emergencyGoal: document.getElementById('emergencyGoal'),
-    investmentGoal: document.getElementById('investmentGoal'),
-    purchaseGoal: document.getElementById('purchaseGoal'),
-    saveSettingsBtn: document.getElementById('saveSettingsBtn'),
-    goalModal: document.getElementById('goalModal'),
-    simulatorModal: document.getElementById('simulatorModal'),
-    editGoalModal: document.getElementById('editGoalModal'),
-    editModal: document.getElementById('editModal'),
-    goalName: document.getElementById('goalName'),
-    goalCategory: document.getElementById('goalCategory'),
-    goalAmount: document.getElementById('goalAmount'),
-    goalDate: document.getElementById('goalDate'),
-    goalType: document.getElementById('goalType'),
-    goalValue: document.getElementById('goalValue'),
-    saveGoalBtn: document.getElementById('saveGoalBtn'),
-    cancelGoalBtn: document.getElementById('cancelGoalBtn'),
-    simulatorContent: document.getElementById('simulatorContent'),
-    closeSimulatorBtn: document.getElementById('closeSimulatorBtn'),
-    editGoalName: document.getElementById('editGoalName'),
-    editGoalCategory: document.getElementById('editGoalCategory'),
-    editGoalAmount: document.getElementById('editGoalAmount'),
-    editGoalDate: document.getElementById('editGoalDate'),
-    editGoalType: document.getElementById('editGoalType'),
-    editGoalValue: document.getElementById('editGoalValue'),
-    saveGoalEditBtn: document.getElementById('saveGoalEditBtn'),
-    cancelGoalEditBtn: document.getElementById('cancelGoalEditBtn'),
-    editAmount: document.getElementById('editAmount'),
-    editIncomeType: document.getElementById('editIncomeType'),
-    editDescription: document.getElementById('editDescription'),
-    saveEditBtn: document.getElementById('saveEditBtn'),
-    cancelEditBtn: document.getElementById('cancelEditBtn'),
-    monthlyTotal: document.getElementById('monthlyTotal'),
-    motivationText: document.getElementById('motivationText'),
-    newMotivationBtn: document.getElementById('newMotivationBtn')
+Baixe gratuitamente:`,
+    icon: 'fa-share-nodes'
 };
 
-let currentResult = null;
-let editingId = null;
-let personalGoals = [];
-let editingGoalId = null;
-let chart = null;
-let lastMotivationIndex = -1;
+const APP_KEY = 'euSeiGerir';
+const OLD_KEY = 'calculadoraGanhos';
+
+// ==================== ESTADO GLOBAL ====================
+let state = {
+    transactions: [],
+    goals: [],
+    wallets: [],
+    bills: [],
+    settings: {
+        theme: localStorage.getItem('theme') || 'light',
+        emergencyGoal: 0,
+        investmentGoal: 0,
+        purchaseGoal: 0
+    },
+    currentFilter: {
+        transactions: 'all',
+        history: { period: 'all', type: 'all' }
+    }
+};
+
+// ==================== SPLASH SCREEN ====================
+function initSplashScreen() {
+    const splashScreen = document.getElementById('splashScreen');
+    const startButton = document.getElementById('startButton');
+    
+    if (!splashScreen || !startButton) return;
+    
+    // Verificar se é primeira vez
+    const hasSeenSplash = localStorage.getItem('hasSeenSplash');
+    
+    if (hasSeenSplash) {
+        splashScreen.classList.add('hidden');
+        return;
+    }
+    
+    startButton.addEventListener('click', () => {
+        splashScreen.style.opacity = '0';
+        splashScreen.style.transition = 'opacity 0.3s ease';
+        
+        setTimeout(() => {
+            splashScreen.classList.add('hidden');
+            localStorage.setItem('hasSeenSplash', 'true');
+        }, 300);
+    });
+}
 
 // ==================== INICIALIZAÇÃO ====================
 document.addEventListener('DOMContentLoaded', () => {
-    loadTheme();
-    setDefaultDate();
-    loadGoals();
-    renderHistory();
-    loadPersonalGoals();
-    updateMonthlyTotal();
-    changeMotivation();
+    migrateOldData();
+    loadData();
+    initTheme();
+    initSplashScreen();
+    setupNavigation();
     setupEventListeners();
     updateHomeScreen();
+    updateWelcomeText();
 });
 
-// ==================== NAVEGAÇÃO ====================
-function setupEventListeners() {
-    elements.navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            navigateTo(item.dataset.screen);
-        });
-    });
-    
-    elements.themeToggle.addEventListener('click', toggleTheme);
-    elements.divisionMethod.addEventListener('change', (e) => {
-        e.target.value === 'custom' ? 
-            elements.customInputs.classList.remove('hidden') : 
-            elements.customInputs.classList.add('hidden');
-    });
-    
-    elements.calculateBtn.addEventListener('click', calculate);
-    elements.copyBtn.addEventListener('click', copyResult);
-    elements.whatsappBtn.addEventListener('click', shareWhatsApp);
-    elements.pdfBtn.addEventListener('click', exportPDF);
-    elements.clearHistoryBtn.addEventListener('click', clearHistory);
-    elements.newMotivationBtn.addEventListener('click', changeMotivation);
-    
-    elements.addGoalBtn.addEventListener('click', () => elements.goalModal.classList.remove('hidden'));
-    elements.cancelGoalBtn.addEventListener('click', () => {
-        elements.goalModal.classList.add('hidden');
-        clearGoalForm();
-    });
-    elements.saveGoalBtn.addEventListener('click', savePersonalGoal);
-    elements.closeSimulatorBtn.addEventListener('click', () => elements.simulatorModal.classList.add('hidden'));
-    elements.cancelGoalEditBtn.addEventListener('click', () => elements.editGoalModal.classList.add('hidden'));
-    elements.saveGoalEditBtn.addEventListener('click', saveGoalEdit);
-    elements.saveSettingsBtn.addEventListener('click', saveSettings);
-    elements.cancelEditBtn.addEventListener('click', () => elements.editModal.classList.add('hidden'));
-    elements.saveEditBtn.addEventListener('click', saveEdit);
-    
-    document.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && e.target.tagName !== 'SELECT') calculate();
-    });
+// ==================== MIGRAÇÃO DE DADOS ANTIGOS ====================
+function migrateOldData() {
+    try {
+        const history = JSON.parse(localStorage.getItem(`${OLD_KEY}_history`) || '[]');
+        const goals = JSON.parse(localStorage.getItem(`${OLD_KEY}_personalGoals`) || '[]');
+        const settings = JSON.parse(localStorage.getItem(`${OLD_KEY}_goals`) || '{}');
+        
+        if (history.length > 0 || goals.length > 0) {
+            // Converter histórico antigo para transações
+            const transactions = history.map(item => ({
+                id: item.id,
+                type: 'income',
+                amount: item.amount,
+                category: 'other',
+                description: item.description || 'Ganho',
+                date: item.date,
+                wallet: 'main',
+                createdAt: new Date().toISOString()
+            }));
+            
+            state.transactions = transactions;
+            state.goals = goals.map(g => ({
+                id: g.id,
+                name: g.name,
+                amount: g.amount,
+                saved: g.saved || 0,
+                date: g.date,
+                icon: '💰',
+                createdAt: g.createdAt
+            }));
+            
+            if (settings.emergency) state.settings.emergencyGoal = settings.emergency;
+            if (settings.investment) state.settings.investmentGoal = settings.investment;
+            if (settings.purchase) state.settings.purchaseGoal = settings.purchase;
+            
+            saveData();
+            clearOldData();
+            showToast('Dados migrados com sucesso!');
+        }
+    } catch (e) {
+        console.error('Erro na migração:', e);
+    }
 }
 
-function navigateTo(screenId) {
-    elements.screens.forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-    elements.navItems.forEach(item => {
-        item.classList.toggle('active', item.dataset.screen === screenId);
-    });
-    window.scrollTo(0, 0);
+function clearOldData() {
+    localStorage.removeItem(`${OLD_KEY}_history`);
+    localStorage.removeItem(`${OLD_KEY}_personalGoals`);
+    localStorage.removeItem(`${OLD_KEY}_goals`);
+}
+
+// ==================== PERSISTÊNCIA DE DADOS ====================
+function saveData() {
+    localStorage.setItem(`${APP_KEY}_transactions`, JSON.stringify(state.transactions));
+    localStorage.setItem(`${APP_KEY}_goals`, JSON.stringify(state.goals));
+    localStorage.setItem(`${APP_KEY}_wallets`, JSON.stringify(state.wallets));
+    localStorage.setItem(`${APP_KEY}_bills`, JSON.stringify(state.bills));
+    localStorage.setItem(`${APP_KEY}_settings`, JSON.stringify(state.settings));
+}
+
+function loadData() {
+    try {
+        state.transactions = JSON.parse(localStorage.getItem(`${APP_KEY}_transactions`) || '[]');
+        state.goals = JSON.parse(localStorage.getItem(`${APP_KEY}_goals`) || '[]');
+        state.wallets = JSON.parse(localStorage.getItem(`${APP_KEY}_wallets`) || '[]');
+        state.bills = JSON.parse(localStorage.getItem(`${APP_KEY}_bills`) || '[]');
+        state.settings = { ...state.settings, ...JSON.parse(localStorage.getItem(`${APP_KEY}_settings`) || '{}') };
+        
+        // Criar carteira padrão se não existir
+        if (state.wallets.length === 0) {
+            state.wallets = [{ id: 'main', name: 'Principal', icon: '💰', balance: 0 }];
+            saveData();
+        }
+    } catch (e) {
+        console.error('Erro ao carregar dados:', e);
+    }
 }
 
 // ==================== TEMA ====================
-function loadTheme() {
-    const theme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-    updateThemeIcon(theme);
+function initTheme() {
+    document.documentElement.setAttribute('data-theme', state.settings.theme);
+    updateThemeIcon();
 }
 
 function toggleTheme() {
-    const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateThemeIcon(newTheme);
+    state.settings.theme = state.settings.theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', state.settings.theme);
+    updateThemeIcon();
+    saveData();
 }
 
-function updateThemeIcon(theme) {
-    elements.themeToggle.querySelector('i').className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+function updateThemeIcon() {
+    const icon = document.querySelector('#themeToggle i');
+    if (icon) {
+        icon.className = state.settings.theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
 }
 
-function setDefaultDate() {
-    elements.date.value = new Date().toISOString().split('T')[0];
+// ==================== NAVEGAÇÃO ====================
+function setupNavigation() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const screenId = item.dataset.screen;
+            navigateTo(screenId);
+        });
+    });
+    
+    // Navegação para carteiras e contas (no topo direito)
+    const walletNavBtn = document.querySelector('[data-screen="walletsScreen"]');
+    const billNavBtn = document.querySelector('[data-screen="billsScreen"]');
+    
+    // Adicionar botões no header (se existirem)
 }
 
-// ==================== MENSAGENS MOTIVACIONAIS ====================
-function changeMotivation() {
-    let newIndex;
-    do {
-        newIndex = Math.floor(Math.random() * motivationalMessages.length);
-    } while (newIndex === lastMotivationIndex && motivationalMessages.length > 1);
+function navigateTo(screenId) {
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('active');
+    });
     
-    lastMotivationIndex = newIndex;
-    const message = motivationalMessages[newIndex];
-    
-    const textElement = elements.motivationText;
-    textElement.style.animation = 'none';
-    setTimeout(() => {
-        textElement.textContent = message;
-        textElement.style.animation = 'fadeIn 0.5s ease';
-    }, 50);
+    const targetScreen = document.getElementById(screenId);
+    if (targetScreen) {
+        targetScreen.classList.add('active');
+        window.scrollTo(0, 0);
+        
+        // Atualizar navegação ativa
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.toggle('active', item.dataset.screen === screenId);
+        });
+        
+        // Atualizar conteúdo da tela
+        switch(screenId) {
+            case 'homeScreen':
+                updateHomeScreen();
+                break;
+            case 'transactionsScreen':
+                updateTransactionsList();
+                break;
+            case 'goalsScreen':
+                updateGoalsList();
+                break;
+            case 'historyScreen':
+                updateHistoryList();
+                break;
+            case 'healthScreen':
+                updateHealthScreen();
+                break;
+            case 'achievementsScreen':
+                updateAchievementsScreen();
+                break;
+        }
+    }
 }
 
-// ==================== TOTAL MENSAL ====================
-function updateMonthlyTotal() {
-    const history = getHistory();
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
+// ==================== BOAS-VINDAS ====================
+function updateWelcomeText() {
+    const hour = new Date().getHours();
+    let greeting = 'Boa noite!';
     
-    let monthlyTotal = 0;
+    if (hour >= 5 && hour < 12) greeting = 'Bom dia!';
+    else if (hour >= 12 && hour < 18) greeting = 'Boa tarde!';
     
-    history.forEach(item => {
-        const itemDate = new Date(item.date);
-        if (itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear) {
-            monthlyTotal += item.amount || 0;
+    const welcomeText = document.getElementById('welcomeText');
+    if (welcomeText) {
+        welcomeText.textContent = greeting;
+    }
+}
+
+// ==================== DASHBOARD HOME ====================
+function updateHomeScreen() {
+    const monthlyData = calculateMonthlyData();
+    
+    // Atualizar cards de estatísticas
+    setValue('monthIncome', formatCurrency(monthlyData.income));
+    setValue('monthExpenses', formatCurrency(monthlyData.expense));
+    setValue('monthProfit', formatCurrency(monthlyData.income - monthlyData.expense));
+    setValue('monthSavings', formatCurrency(monthlyData.savings));
+    
+    // Atualizar patrimônio total
+    const totalWealth = calculateTotalWealth();
+    setValue('totalWealth', formatCurrency(totalWealth));
+    setValue('availableBalance', formatCurrency(totalWealth - calculateTotalBills()));
+    
+    // Atualizar meta principal
+    updatePrimaryGoal();
+    
+    // Atualizar contas próximas
+    updateBillsSummary();
+    
+    // Atualizar últimos lançamentos
+    updateRecentTransactions();
+    
+    // Atualizar gráfico
+    updateFinanceChart();
+}
+
+function calculateMonthlyData() {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    
+    let income = 0;
+    let expense = 0;
+    let savings = 0;
+    
+    state.transactions.forEach(transaction => {
+        const transactionDate = new Date(transaction.date);
+        if (transactionDate.getMonth() === currentMonth && 
+            transactionDate.getFullYear() === currentYear) {
+            if (transaction.type === 'income') {
+                income += transaction.amount;
+            } else {
+                expense += transaction.amount;
+            }
         }
     });
     
-    elements.monthlyTotal.textContent = formatCurrency(monthlyTotal);
+    // Calcular economia baseada nas metas
+    state.goals.forEach(goal => {
+        savings += goal.saved || 0;
+    });
+    
+    return { income, expense, savings };
 }
 
-// ==================== CÁLCULO PRINCIPAL ====================
-function calculate() {
-    const amount = parseFloat(elements.amount.value);
+function calculateTotalWealth() {
+    let total = 0;
+    
+    state.transactions.forEach(transaction => {
+        if (transaction.type === 'income') {
+            total += transaction.amount;
+        } else {
+            total -= transaction.amount;
+        }
+    });
+    
+    return total;
+}
+
+function calculateTotalBills() {
+    return state.bills.reduce((sum, bill) => sum + (bill.amount || 0), 0);
+}
+
+function updatePrimaryGoal() {
+    const primaryGoalContent = document.getElementById('primaryGoalContent');
+    if (!primaryGoalContent) return;
+    
+    if (state.goals.length === 0) {
+        primaryGoalContent.innerHTML = '<p class="no-goal-message">Nenhuma meta definida. Crie sua primeira meta!</p>';
+        return;
+    }
+    
+    // Pegar a meta com maior valor ou mais próxima de ser concluída
+    const primaryGoal = state.goals.reduce((best, goal) => {
+        const progress = goal.saved / goal.amount;
+        const bestProgress = best.saved / best.amount;
+        return progress > bestProgress ? goal : best;
+    }, state.goals[0]);
+    
+    const progress = (primaryGoal.saved / primaryGoal.amount) * 100;
+    const remaining = primaryGoal.amount - primaryGoal.saved;
+    
+    primaryGoalContent.innerHTML = `
+        <div class="primary-goal-info">
+            <div class="primary-goal-header">
+                <span class="primary-goal-icon">${primaryGoal.icon || '🎯'}</span>
+                <h3>${primaryGoal.name}</h3>
+            </div>
+            <div class="primary-goal-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+                </div>
+                <div class="progress-info">
+                    <span>${formatCurrency(primaryGoal.saved)} / ${formatCurrency(primaryGoal.amount)}</span>
+                    <span>${progress.toFixed(1)}%</span>
+                </div>
+            </div>
+            <p class="primary-goal-remaining">Faltam: ${formatCurrency(remaining)}</p>
+        </div>
+    `;
+}
+
+function updateBillsSummary() {
+    const billsContent = document.getElementById('billsContent');
+    if (!billsContent) return;
+    
+    if (state.bills.length === 0) {
+        billsContent.innerHTML = '<p class="no-bills-message">Nenhuma conta cadastrada</p>';
+        return;
+    }
+    
+    // Mostrar próximas 3 contas
+    const upcomingBills = state.bills
+        .map(bill => ({
+            ...bill,
+            daysUntilDue: getDaysUntilDue(bill.dueDate)
+        }))
+        .sort((a, b) => a.daysUntilDue - b.daysUntilDue)
+        .slice(0, 3);
+    
+    billsContent.innerHTML = upcomingBills.map(bill => {
+        const statusClass = bill.daysUntilDue < 0 ? 'overdue' : 
+                           bill.daysUntilDue <= 7 ? 'pending' : 'upcoming';
+        return `
+            <div class="bill-item-summary">
+                <div class="bill-summary-info">
+                    <h4>${bill.name}</h4>
+                    <p>Vence em ${Math.abs(bill.daysUntilDue)} dias</p>
+                </div>
+                <span class="bill-summary-amount ${statusClass}">
+                    ${formatCurrency(bill.amount)}
+                </span>
+            </div>
+        `;
+    }).join('');
+}
+
+function getDaysUntilDue(dueDate) {
+    const today = new Date();
+    const due = new Date(dueDate);
+    const diffTime = due - today;
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
+// ==================== TRANSAÇÕES (RECEITAS E DESPESAS) ====================
+function openIncomeModal() {
+    document.getElementById('incomeModal').classList.remove('hidden');
+    setDefaultDate('incomeDate');
+    updateWalletSelects('incomeWallet');
+}
+
+function openExpenseModal() {
+    document.getElementById('expenseModal').classList.remove('hidden');
+    setDefaultDate('expenseDate');
+    updateWalletSelects('expenseWallet');
+}
+
+function updateWalletSelects(selectId) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
+    
+    select.innerHTML = state.wallets.map(wallet => 
+        `<option value="${wallet.id}">${wallet.name}</option>`
+    ).join('');
+}
+
+function saveIncome() {
+    const amount = parseFloat(document.getElementById('incomeAmount').value);
+    const category = document.getElementById('incomeCategory').value;
+    const wallet = document.getElementById('incomeWallet').value;
+    const description = document.getElementById('incomeDescription').value;
+    const date = document.getElementById('incomeDate').value;
+    
     if (!amount || amount <= 0) {
-        alert('Insira um valor válido!');
+        showToast('Insira um valor válido!', 'error');
+        return;
+    }
+    
+    const transaction = {
+        id: Date.now(),
+        type: 'income',
+        amount,
+        category,
+        wallet,
+        description: description || getCategoryLabel(category),
+        date,
+        createdAt: new Date().toISOString()
+    };
+    
+    state.transactions.unshift(transaction);
+    updateWalletBalance(wallet, amount);
+    saveData();
+    closeModal('incomeModal');
+    
+    // Ativar o mentor para educar o usuário
+    const mentorAdvice = getMentorAdvice(amount);
+    showMentorAdvice(mentorAdvice);
+    
+    updateHomeScreen();
+}
+
+function saveExpense() {
+    const amount = parseFloat(document.getElementById('expenseAmount').value);
+    const category = document.getElementById('expenseCategory').value;
+    const wallet = document.getElementById('expenseWallet').value;
+    const description = document.getElementById('expenseDescription').value;
+    const date = document.getElementById('expenseDate').value;
+    
+    if (!amount || amount <= 0) {
+        showToast('Insira um valor válido!', 'error');
+        return;
+    }
+    
+    const transaction = {
+        id: Date.now(),
+        type: 'expense',
+        amount,
+        category,
+        wallet,
+        description: description || getCategoryLabel(category),
+        date,
+        createdAt: new Date().toISOString()
+    };
+    
+    state.transactions.unshift(transaction);
+    updateWalletBalance(wallet, -amount);
+    saveData();
+    closeModal('expenseModal');
+    
+    // Verificar se o gasto está adequado
+    const remaining = calculateAvailableBalance();
+    if (remaining < 0) {
+        showToast('Atenção: você está gastando mais do que recebe!', 'error');
+    } else {
+        showToast('Despesa registrada!');
+    }
+    
+    updateHomeScreen();
+}
+
+function updateWalletBalance(walletId, amount) {
+    const wallet = state.wallets.find(w => w.id === walletId);
+    if (wallet) {
+        wallet.balance = (wallet.balance || 0) + amount;
+    }
+}
+
+function updateTransactionsList() {
+    const transactionsList = document.getElementById('transactionsList');
+    if (!transactionsList) return;
+    
+    let transactions = [...state.transactions];
+    
+    // Aplicar filtro
+    if (state.currentFilter.transactions !== 'all') {
+        transactions = transactions.filter(t => t.type === state.currentFilter.transactions);
+    }
+    
+    if (transactions.length === 0) {
+        transactionsList.innerHTML = '<p class="empty-message">Nenhum lançamento encontrado</p>';
+        return;
+    }
+    
+    transactionsList.innerHTML = transactions.map(transaction => `
+        <div class="transaction-item">
+            <div class="transaction-header">
+                <div class="transaction-icon ${transaction.type}">
+                    <i class="fas ${transaction.type === 'income' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
+                </div>
+                <span class="transaction-amount ${transaction.type}">
+                    ${transaction.type === 'income' ? '+' : '-'} ${formatCurrency(transaction.amount)}
+                </span>
+            </div>
+            <div class="transaction-details">
+                <div class="transaction-detail">
+                    <span class="transaction-detail-label">Categoria</span>
+                    <span class="transaction-detail-value">${getCategoryLabel(transaction.category)}</span>
+                </div>
+                <div class="transaction-detail">
+                    <span class="transaction-detail-label">Data</span>
+                    <span class="transaction-detail-value">${formatDate(transaction.date)}</span>
+                </div>
+                <div class="transaction-detail">
+                    <span class="transaction-detail-label">Descrição</span>
+                    <span class="transaction-detail-value">${transaction.description}</span>
+                </div>
+            </div>
+            <div class="transaction-actions">
+                <button class="btn-goal edit" onclick="editTransaction(${transaction.id})">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn-goal delete" onclick="deleteTransaction(${transaction.id})">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ==================== CARTEIRAS ====================
+function saveWallet() {
+    const name = document.getElementById('walletName').value.trim();
+    const icon = document.getElementById('walletIcon').value;
+    
+    if (!name) {
+        showToast('Insira um nome para a carteira!', 'error');
+        return;
+    }
+    
+    const wallet = {
+        id: 'wallet_' + Date.now(),
+        name,
+        icon,
+        balance: 0
+    };
+    
+    state.wallets.push(wallet);
+    saveData();
+    closeModal('walletModal');
+    showToast('Carteira criada!');
+    updateWalletsList();
+}
+
+function updateWalletsList() {
+    const walletsList = document.getElementById('walletsList');
+    if (!walletsList) return;
+    
+    if (state.wallets.length === 0) {
+        walletsList.innerHTML = '<p class="empty-message">Nenhuma carteira cadastrada</p>';
+        return;
+    }
+    
+    walletsList.innerHTML = state.wallets.map(wallet => `
+        <div class="wallet-card">
+            <span class="wallet-icon">${wallet.icon}</span>
+            <h3 class="wallet-name">${wallet.name}</h3>
+            <p class="wallet-balance">${formatCurrency(wallet.balance || 0)}</p>
+        </div>
+    `).join('');
+}
+
+// ==================== CONTAS ====================
+function saveBill() {
+    const name = document.getElementById('billName').value.trim();
+    const amount = parseFloat(document.getElementById('billAmount').value);
+    const dueDate = document.getElementById('billDueDate').value;
+    const recurrence = document.getElementById('billRecurrence').value;
+    
+    if (!name || !amount || !dueDate) {
+        showToast('Preencha todos os campos!', 'error');
+        return;
+    }
+    
+    const bill = {
+        id: Date.now(),
+        name,
+        amount,
+        dueDate,
+        recurrence,
+        status: 'pending',
+        paid: false
+    };
+    
+    state.bills.push(bill);
+    saveData();
+    closeModal('billModal');
+    showToast('Conta cadastrada!');
+    updateBillsList();
+}
+
+function updateBillsList() {
+    const billsList = document.getElementById('billsList');
+    if (!billsList) return;
+    
+    if (state.bills.length === 0) {
+        billsList.innerHTML = '<p class="empty-message">Nenhuma conta cadastrada</p>';
+        return;
+    }
+    
+    billsList.innerHTML = state.bills.map(bill => {
+        const daysUntilDue = getDaysUntilDue(bill.dueDate);
+        let status = 'Pendente';
+        let statusClass = 'pending';
+        
+        if (bill.paid) {
+            status = 'Paga';
+            statusClass = 'paid';
+        } else if (daysUntilDue < 0) {
+            status = 'Atrasada';
+            statusClass = 'overdue';
+        }
+        
+        return `
+            <div class="bill-item">
+                <div class="bill-info">
+                    <h3 class="bill-name">${bill.name}</h3>
+                    <div class="bill-details">
+                        <span>Vencimento: ${formatDate(bill.dueDate)}</span>
+                        <span>${getRecurrenceLabel(bill.recurrence)}</span>
+                        <span class="bill-status ${statusClass}">${status}</span>
+                    </div>
+                </div>
+                <span class="bill-amount">${formatCurrency(bill.amount)}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+// ==================== METAS ====================
+function saveGoal() {
+    const name = document.getElementById('goalName').value.trim();
+    const amount = parseFloat(document.getElementById('goalAmount').value);
+    const date = document.getElementById('goalDate').value;
+    const icon = document.getElementById('goalIcon').value;
+    
+    if (!name || !amount) {
+        showToast('Preencha todos os campos!', 'error');
+        return;
+    }
+    
+    const goal = {
+        id: Date.now(),
+        name,
+        amount,
+        saved: 0,
+        date,
+        icon,
+        createdAt: new Date().toISOString()
+    };
+    
+    state.goals.push(goal);
+    saveData();
+    closeModal('goalModal');
+    showToast('Meta criada!');
+    updateGoalsList();
+    updateHomeScreen();
+}
+
+function addSavingsToGoal(goalId) {
+    const amount = prompt('Quanto deseja adicionar? (R$)');
+    if (!amount || isNaN(parseFloat(amount))) return;
+    
+    const goal = state.goals.find(g => g.id === goalId);
+    if (goal) {
+        goal.saved += parseFloat(amount);
+        saveData();
+        updateGoalsList();
+        updateHomeScreen();
+        showToast(`${formatCurrency(parseFloat(amount))} adicionado!`);
+    }
+}
+
+function deleteGoal(goalId) {
+    if (!confirm('Excluir esta meta?')) return;
+    state.goals = state.goals.filter(g => g.id !== goalId);
+    saveData();
+    updateGoalsList();
+    updateHomeScreen();
+    showToast('Meta excluída!');
+}
+
+function updateGoalsList() {
+    const goalsList = document.getElementById('goalsList');
+    if (!goalsList) return;
+    
+    if (state.goals.length === 0) {
+        goalsList.innerHTML = '<p class="empty-message">Nenhuma meta cadastrada. Crie sua primeira meta!</p>';
+        return;
+    }
+    
+    goalsList.innerHTML = state.goals.map(goal => {
+        const progress = (goal.saved / goal.amount) * 100;
+        const remaining = goal.amount - goal.saved;
+        
+        return `
+            <div class="goal-item">
+                <div class="goal-header">
+                    <div class="goal-title">
+                        <h3><span class="goal-icon">${goal.icon || '🎯'}</span> ${goal.name}</h3>
+                    </div>
+                </div>
+                <div class="goal-info">
+                    <div class="goal-info-item">
+                        <label>Meta</label>
+                        <p>${formatCurrency(goal.amount)}</p>
+                    </div>
+                    <div class="goal-info-item">
+                        <label>Economizado</label>
+                        <p>${formatCurrency(goal.saved)}</p>
+                    </div>
+                    <div class="goal-info-item">
+                        <label>Faltam</label>
+                        <p>${formatCurrency(remaining)}</p>
+                    </div>
+                    <div class="goal-info-item">
+                        <label>Progresso</label>
+                        <p>${progress.toFixed(1)}%</p>
+                    </div>
+                </div>
+                <div class="goal-progress">
+                    <div class="goal-progress-bar">
+                        <div class="goal-progress-fill" style="width: ${Math.min(progress, 100)}%"></div>
+                    </div>
+                </div>
+                <div class="goal-actions-row">
+                    <button class="btn-goal add-savings" onclick="addSavingsToGoal(${goal.id})">
+                        <i class="fas fa-plus"></i> Economizar
+                    </button>
+                    <button class="btn-goal delete" onclick="deleteGoal(${goal.id})">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Atualizar dashboard
+    updateGoalsDashboard();
+}
+
+function updateGoalsDashboard() {
+    const total = state.goals.length;
+    const completed = state.goals.filter(g => g.amount <= g.saved).length;
+    const totalSaved = state.goals.reduce((sum, g) => sum + g.saved, 0);
+    
+    setValue('activeGoalsCount', total);
+    setValue('completedGoals', completed);
+    setValue('totalGoalsSaved', formatCurrency(totalSaved));
+    
+    // Calcular próxima meta
+    const activeGoals = state.goals.filter(g => g.amount > g.saved);
+    if (activeGoals.length > 0) {
+        const nearest = activeGoals.reduce((nearest, goal) => {
+            const daysNeeded = calculateDaysToComplete(goal);
+            return !nearest || daysNeeded < nearest.days ? { goal, days: daysNeeded } : nearest;
+        }, null);
+        
+        if (nearest) {
+            setValue('nextGoalTime', `${nearest.days}d`);
+        }
+    } else {
+        setValue('nextGoalTime', '-');
+    }
+}
+
+function calculateDaysToComplete(goal) {
+    const remaining = goal.amount - goal.saved;
+    // Estimativa baseada em média de economia mensal (simplificado)
+    const monthlySavings = state.transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0) * 0.2; // 20% de economia
+    
+    if (monthlySavings === 0) return 999;
+    return Math.ceil(remaining / monthlySavings * 30);
+}
+
+// ==================== HISTÓRICO ====================
+function updateHistoryList() {
+    const historyList = document.getElementById('historyList');
+    if (!historyList) return;
+    
+    let transactions = [...state.transactions];
+    const { period, type } = state.currentFilter.history;
+    
+    // Filtro por período
+    if (period !== 'all') {
+        transactions = filterByPeriod(transactions, period);
+    }
+    
+    // Filtro por tipo
+    if (type !== 'all') {
+        if (type === 'goal') {
+            transactions = [];
+        } else {
+            transactions = transactions.filter(t => t.type === type);
+        }
+    }
+    
+    if (transactions.length === 0) {
+        historyList.innerHTML = '<p class="empty-message">Nenhum lançamento encontrado</p>';
+        return;
+    }
+    
+    historyList.innerHTML = transactions.map(transaction => `
+        <div class="history-item">
+            <div class="history-info">
+                <h4>${formatDate(transaction.date)} - ${getCategoryLabel(transaction.category)}</h4>
+                <p><strong>Valor:</strong> ${formatCurrency(transaction.amount)}</p>
+                <p><strong>Tipo:</strong> ${transaction.type === 'income' ? 'Receita' : 'Despesa'}</p>
+                <p><strong>Descrição:</strong> ${transaction.description}</p>
+            </div>
+            <div class="history-actions">
+                <button class="btn-icon" onclick="editTransaction(${transaction.id})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon danger" onclick="deleteTransaction(${transaction.id})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function filterByPeriod(transactions, period) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    return transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.date);
+        const diffTime = today - transactionDate;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        
+        switch(period) {
+            case 'today':
+                return diffDays === 0;
+            case 'week':
+                return diffDays >= 0 && diffDays <= 7;
+            case 'month':
+                return transactionDate.getMonth() === now.getMonth() && 
+                       transactionDate.getFullYear() === now.getFullYear();
+            case 'year':
+                return transactionDate.getFullYear() === now.getFullYear();
+            default:
+                return true;
+        }
+    });
+}
+
+window.editTransaction = function(id) {
+    const transaction = state.transactions.find(t => t.id === id);
+    if (!transaction) return;
+    
+    const newAmount = prompt('Novo valor:', transaction.amount);
+    if (!newAmount || isNaN(parseFloat(newAmount))) return;
+    
+    transaction.amount = parseFloat(newAmount);
+    saveData();
+    updateHistoryList();
+    updateHomeScreen();
+    showToast('Transação atualizada!');
+};
+
+window.deleteTransaction = function(id) {
+    if (!confirm('Excluir esta transação?')) return;
+    const transaction = state.transactions.find(t => t.id === id);
+    state.transactions = state.transactions.filter(t => t.id !== id);
+    saveData();
+    updateHistoryList();
+    updateHomeScreen();
+    
+    // Recompensar se estiver criando hábito
+    if (transaction && transaction.type === 'income') {
+        showToast('Transação excluída. Continue organizando suas finanças!');
+    }
+};
+
+function clearHistory() {
+    if (!confirm('Limpar todo o histórico? Esta ação não pode ser desfeita.')) return;
+    state.transactions = [];
+    saveData();
+    updateHistoryList();
+    updateHomeScreen();
+    showToast('Histórico limpo!');
+}
+
+// ==================== FERRAMENTAS ====================
+function setupEventListeners() {
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    // Modals
+    document.getElementById('saveIncomeBtn')?.addEventListener('click', saveIncome);
+    document.getElementById('cancelIncomeBtn')?.addEventListener('click', () => closeModal('incomeModal'));
+    document.getElementById('saveExpenseBtn')?.addEventListener('click', saveExpense);
+    document.getElementById('cancelExpenseBtn')?.addEventListener('click', () => closeModal('expenseModal'));
+    document.getElementById('saveGoalBtn')?.addEventListener('click', saveGoal);
+    document.getElementById('cancelGoalBtn')?.addEventListener('click', () => closeModal('goalModal'));
+    document.getElementById('saveBillBtn')?.addEventListener('click', saveBill);
+    document.getElementById('cancelBillBtn')?.addEventListener('click', () => closeModal('billModal'));
+    document.getElementById('saveWalletBtn')?.addEventListener('click', saveWallet);
+    document.getElementById('cancelWalletBtn')?.addEventListener('click', () => closeModal('walletModal'));
+    
+    // Modais de carteira e conta (abrir)
+    document.getElementById('addWalletBtn')?.addEventListener('click', () => {
+        document.getElementById('walletModal').classList.remove('hidden');
+    });
+    
+    document.getElementById('addBillBtn')?.addEventListener('click', () => {
+        document.getElementById('billModal').classList.remove('hidden');
+        setDefaultDate('billDueDate');
+    });
+    
+    // Filtros
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            state.currentFilter.transactions = tab.dataset.filter;
+            updateTransactionsList();
+        });
+    });
+    
+    document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.currentFilter.history.period = btn.dataset.period;
+            updateHistoryList();
+        });
+    });
+    
+    document.querySelectorAll('.type-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            state.currentFilter.history.type = btn.dataset.type;
+            updateHistoryList();
+        });
+    });
+    
+    // Clear history
+    document.getElementById('clearHistoryBtn')?.addEventListener('click', clearHistory);
+    
+    // Calculadora de divisão
+    document.getElementById('calculateToolBtn')?.addEventListener('click', calculateToolDivision);
+    document.getElementById('toolDivision')?.addEventListener('change', (e) => {
+        const customInputs = document.getElementById('customToolInputs');
+        if (customInputs) {
+            customInputs.classList.toggle('hidden', e.target.value !== 'custom');
+        }
+    });
+    
+    // Compartilhamento
+    window.shareApp = shareApp;
+    
+    // Quick actions (se existirem)
+    // Adicionar listeners para navegação rápida
+}
+
+// ==================== FUNÇÕES UTILITÁRIAS ====================
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+        // Limpar formulários
+        const inputs = modal.querySelectorAll('input');
+        inputs.forEach(input => input.value = '');
+    }
+}
+
+function setDefaultDate(inputId) {
+    const input = document.getElementById(inputId);
+    if (input) {
+        input.value = new Date().toISOString().split('T')[0];
+    }
+}
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat('pt-BR', { 
+        style: 'currency', 
+        currency: 'BRL' 
+    }).format(value || 0);
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const [year, month, day] = dateStr.split('-');
+    return `${day}/${month}/${year}`;
+}
+
+function getCategoryLabel(category) {
+    const labels = {
+        // Receitas
+        uber: 'Uber',
+        '99': '99',
+        freelance: 'Freelance',
+        service: 'Prestação de Serviço',
+        sale: 'Venda',
+        salary: 'Salário',
+        pix: 'PIX',
+        transfer: 'Transferência',
+        other: 'Outros',
+        // Despesas
+        house: 'Casa',
+        fuel: 'Combustível',
+        market: 'Mercado',
+        food: 'Alimentação',
+        health: 'Saúde',
+        college: 'Faculdade',
+        leisure: 'Lazer',
+        internet: 'Internet',
+        tools: 'Ferramentas',
+        taxes: 'Impostos',
+        phone: 'Telefone',
+        installments: 'Parcelas'
+    };
+    return labels[category] || category;
+}
+
+function getRecurrenceLabel(recurrence) {
+    const labels = {
+        monthly: 'Mensal',
+        weekly: 'Semanal',
+        biweekly: 'Quinzenal',
+        yearly: 'Anual'
+    };
+    return labels[recurrence] || recurrence;
+}
+
+function setValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.textContent = value;
+    }
+}
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'fadeIn 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// ==================== GRÁFICOS ====================
+let financeChart = null;
+
+function updateFinanceChart() {
+    const ctx = document.getElementById('financeChart');
+    if (!ctx) return;
+    
+    const last6Months = getLast6MonthsData();
+    
+    if (financeChart) {
+        financeChart.destroy();
+    }
+    
+    financeChart = new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: last6Months.labels,
+            datasets: [
+                {
+                    label: 'Receitas',
+                    data: last6Months.income,
+                    backgroundColor: '#10B981',
+                    borderRadius: 8
+                },
+                {
+                    label: 'Despesas',
+                    data: last6Months.expense,
+                    backgroundColor: '#EF4444',
+                    borderRadius: 8
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        padding: 12,
+                        font: { size: 11, weight: '600' }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR');
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+function getLast6MonthsData() {
+    const months = [];
+    const income = [];
+    const expense = [];
+    const labels = [];
+    
+    for (let i = 5; i >= 0; i--) {
+        const date = new Date();
+        date.setMonth(date.getMonth() - i);
+        const month = date.getMonth();
+        const year = date.getFullYear();
+        
+        months.push({ month, year });
+        labels.push(date.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }));
+        
+        let monthIncome = 0;
+        let monthExpense = 0;
+        
+        state.transactions.forEach(transaction => {
+            const transactionDate = new Date(transaction.date);
+            if (transactionDate.getMonth() === month && 
+                transactionDate.getFullYear() === year) {
+                if (transaction.type === 'income') {
+                    monthIncome += transaction.amount;
+                } else {
+                    monthExpense += transaction.amount;
+                }
+            }
+        });
+        
+        income.push(monthIncome);
+        expense.push(monthExpense);
+    }
+    
+    return { labels, income, expense };
+}
+
+// ==================== CALCULADORA DE DIVISÃO (FERRAMENTAS) ====================
+function calculateToolDivision() {
+    const amount = parseFloat(document.getElementById('toolAmount').value);
+    const method = document.getElementById('toolDivision').value;
+    
+    if (!amount || amount <= 0) {
+        showToast('Insira um valor válido!', 'error');
         return;
     }
     
     let needsPercent, wantsPercent, savingsPercent;
-    const method = elements.divisionMethod.value;
     
-    switch (method) {
-        case '50-30-20': needsPercent=50; wantsPercent=30; savingsPercent=20; break;
-        case '60-20-20': needsPercent=60; wantsPercent=20; savingsPercent=20; break;
-        case '70-20-10': needsPercent=70; wantsPercent=20; savingsPercent=10; break;
+    switch(method) {
+        case '50-30-20':
+            needsPercent = 50; wantsPercent = 30; savingsPercent = 20;
+            break;
+        case '60-20-20':
+            needsPercent = 60; wantsPercent = 20; savingsPercent = 20;
+            break;
+        case '70-20-10':
+            needsPercent = 70; wantsPercent = 20; savingsPercent = 10;
+            break;
         case 'custom':
-            needsPercent = parseFloat(elements.customNeeds.value) || 50;
-            wantsPercent = parseFloat(elements.customWants.value) || 30;
-            savingsPercent = parseFloat(elements.customSavings.value) || 20;
+            needsPercent = parseFloat(document.getElementById('customNeeds').value) || 50;
+            wantsPercent = parseFloat(document.getElementById('customWants').value) || 30;
+            savingsPercent = parseFloat(document.getElementById('customSavings').value) || 20;
+            break;
     }
     
     if (needsPercent + wantsPercent + savingsPercent > 100) {
-        alert('Soma dos percentuais não pode ultrapassar 100%!');
+        showToast('A soma dos percentuais não pode ultrapassar 100%!', 'error');
         return;
     }
     
     const needsValue = (amount * needsPercent) / 100;
     const wantsValue = (amount * wantsPercent) / 100;
     const savingsValue = (amount * savingsPercent) / 100;
-    const totalDistributed = needsValue + wantsValue + savingsValue;
-    const remaining = amount - totalDistributed;
     
-    const incomeTypeMap = {daily:'Diário',weekly:'Semanal',biweekly:'Quinzenal',monthly:'Mensal',other:'Outro'};
-    const divisionMethodMap = {
-        '50-30-20':'50/30/20','60-20-20':'60/20/20','70-20-10':'70/20/10',
-        'custom':`Personalizado (${needsPercent}/${wantsPercent}/${savingsPercent})`
-    };
+    setValue('toolNeedsValue', formatCurrency(needsValue));
+    setValue('toolWantsValue', formatCurrency(wantsValue));
+    setValue('toolSavingsValue', formatCurrency(savingsValue));
     
-    currentResult = {
-        id: Date.now(),
-        date: elements.date.value,
-        amount,
-        incomeType: incomeTypeMap[elements.incomeType.value],
-        divisionMethod: divisionMethodMap[method],
-        needsPercent, wantsPercent, savingsPercent,
-        needsValue, wantsValue, savingsValue,
-        totalDistributed, remaining,
-        description: elements.description.value
-    };
-    
-    displayResults(currentResult);
-    saveToHistory(currentResult);
-    updateGoals();
-    updateGoalProgress();
-    updateMonthlyTotal();
-    changeMotivation();
-    updateHomeScreen();
-    generateAlerts(currentResult);
-    
-    elements.resultCard.classList.remove('hidden');
-    setTimeout(() => elements.resultCard.scrollIntoView({behavior:'smooth'}), 100);
+    const toolResult = document.getElementById('toolResult');
+    if (toolResult) {
+        toolResult.classList.remove('hidden');
+    }
 }
 
-// ==================== EXIBIR RESULTADOS ====================
-function displayResults(result) {
-    elements.needsValueCard.textContent = formatCurrency(result.needsValue);
-    elements.wantsValueCard.textContent = formatCurrency(result.wantsValue);
-    elements.savingsValueCard.textContent = formatCurrency(result.savingsValue);
-    elements.needsPercent.textContent = `${result.needsPercent}%`;
-    elements.wantsPercent.textContent = `${result.wantsPercent}%`;
-    elements.savingsPercent.textContent = `${result.savingsPercent}%`;
-    elements.needsBar.style.width = `${result.needsPercent}%`;
-    elements.wantsBar.style.width = `${result.wantsPercent}%`;
-    elements.savingsBar.style.width = `${result.savingsPercent}%`;
-    updateChart(result);
-}
+// ==================== COMPARTILHAMENTO ====================
+/**
+ * Sistema de compartilhamento profissional com fallback em cascata
+ * 1. Web Share API (nativo)
+ * 2. WhatsApp (se disponível)
+ * 3. Clipboard (último recurso)
+ */
+async function shareApp() {
+    const shareUrl = APP_CONFIG.url;
+    const shareTitle = APP_CONFIG.name;
+    const shareText = APP_CONFIG.shareMessage + '\n\n' + shareUrl;
 
-function updateChart(result) {
-    const ctx = document.getElementById('pieChart');
-    if (!ctx) return;
-    
-    if (chart) chart.destroy();
-    
-    chart = new Chart(ctx.getContext('2d'), {
-        type: 'pie',
-        data: {
-            labels: ['Necessidades', 'Desejos', 'Investimentos'],
-            datasets: [{
-                data: [result.needsValue, result.wantsValue, result.savingsValue],
-                backgroundColor: ['#f59e0b', '#8b5cf6', '#10b981'],
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { position: 'bottom', labels: { padding: 12, font: { size: 11 } } }
+    // 1. Tentar Web Share API
+    if (navigator.share && navigator.canShare) {
+        try {
+            const shareData = {
+                title: shareTitle,
+                text: shareText,
+                url: shareUrl
+            };
+
+            if (navigator.canShare(shareData)) {
+                await navigator.share(shareData);
+                showToast('Obrigado por compartilhar ❤️');
+                return;
             }
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                return; // Usuário cancelou
+            }
+            // Continuar para próximo fallback
         }
-    });
+    }
+
+    // 2. Tentar WhatsApp
+    try {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(shareText)}`;
+            
+            // Testar se WhatsApp está disponível
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('WhatsApp timeout'));
+                }, 2000);
+
+                const img = new Image();
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    resolve();
+                };
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    reject(new Error('WhatsApp not available'));
+                };
+                img.src = 'https://whatsapp.com/favicon.ico?' + Date.now();
+            });
+
+            window.open(whatsappUrl, '_blank');
+            showToast('Obrigado por compartilhar ❤️');
+            return;
+        }
+    } catch (error) {
+        // Continuar para próximo fallback
+    }
+
+    // 3. Fallback: Clipboard
+    try {
+        await navigator.clipboard.writeText(shareText + '\n\n' + shareUrl);
+        showToast('Link copiado! Cole e compartilhe ❤️');
+    } catch (error) {
+        // Fallback final: método antigo
+        fallbackCopyToClipboard(shareText + '\n\n' + shareUrl);
+        showToast('Link copiado! Cole e compartilhe ❤️');
+    }
 }
 
-// ==================== HOME SCREEN ====================
-function updateHomeScreen() {
-    const history = getHistory();
-    if (history.length > 0) {
-        const last = history[0];
-        elements.needsValue.textContent = formatCurrency(last.needsValue);
-        elements.wantsValue.textContent = formatCurrency(last.wantsValue);
-        elements.savingsValue.textContent = formatCurrency(last.savingsValue);
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+    } catch (error) {
+        console.error('Fallback copy failed:', error);
     }
     
-    const totalGoalsEl = document.getElementById('activeGoalsCount');
-    const totalReservedEl = document.getElementById('totalReserved');
-    const nextGoalNameEl = document.getElementById('nextGoalName');
-    const nextGoalRemainingEl = document.getElementById('nextGoalRemaining');
-    const nextGoalDaysEl = document.getElementById('nextGoalDays');
+    document.body.removeChild(textArea);
+}
 
-    const activeGoals = personalGoals.filter(g => g.amount - g.saved > 0);
-    if (totalGoalsEl) totalGoalsEl.textContent = String(activeGoals.length);
-    if (totalReservedEl) {
-        const totalSaved = personalGoals.reduce((sum, g) => sum + (g.saved || 0), 0);
-        totalReservedEl.textContent = formatCurrency(totalSaved);
+// ==================== EXPORTAR DADOS ====================
+function exportData(format) {
+    switch(format) {
+        case 'pdf':
+            window.print();
+            break;
+        case 'csv':
+            exportCSV();
+            break;
+        case 'share':
+            shareData();
+            break;
     }
+}
+
+function exportCSV() {
+    let csv = 'Data,Descrição,Tipo,Valor,Categoria\n';
     
-    if (activeGoals.length > 0) {
-        const closest = activeGoals.reduce((closest, goal) => {
-            const stats = calculateGoalStats(goal);
-            if (!closest || stats.daysLeft < closest.daysLeft) return { goal, daysLeft: stats.daysLeft };
-            return closest;
-        }, null);
-        
-        if (closest) {
-            const progress = (closest.goal.saved / closest.goal.amount) * 100;
-            if (nextGoalNameEl) nextGoalNameEl.textContent = closest.goal.name;
-            if (nextGoalRemainingEl) nextGoalRemainingEl.textContent = `Faltam: ${formatCurrency(closest.goal.amount - closest.goal.saved)}`;
-            if (nextGoalDaysEl) nextGoalDaysEl.textContent = closest.daysLeft > 0 ? `${closest.daysLeft} dias` : 'Concluída';
-        }
+    state.transactions.forEach(transaction => {
+        csv += `${transaction.date},"${transaction.description}",${transaction.type},${transaction.amount},${getCategoryLabel(transaction.category)}\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `eu-sei-gerir-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    showToast('CSV exportado!');
+}
+
+function shareData() {
+    const data = {
+        transactions: state.transactions,
+        goals: state.goals,
+        exportDate: new Date().toISOString()
+    };
+    
+    const shareText = `EU SEI GERIR - Relatório Financeiro\n\n` +
+        `Total de Transações: ${state.transactions.length}\n` +
+        `Total de Metas: ${state.goals.length}\n` +
+        `Exportado em: ${new Date().toLocaleDateString('pt-BR')}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'EU SEI GERIR',
+            text: shareText
+        }).catch(() => {});
     } else {
-        if (nextGoalNameEl) nextGoalNameEl.textContent = 'Nenhuma meta ativa';
-        if (nextGoalRemainingEl) nextGoalRemainingEl.textContent = 'Faltam: R$ 0';
-        if (nextGoalDaysEl) nextGoalDaysEl.textContent = 'Previsão: -';
-    }
-}
-
-// ==================== METAS COM CATEGORIAS ====================
-function savePersonalGoal() {
-    const name = elements.goalName.value.trim();
-    const category = elements.goalCategory.value;
-    const amount = parseFloat(elements.goalAmount.value);
-    const date = elements.goalDate.value;
-    const type = elements.goalType.value;
-    const value = parseFloat(elements.goalValue.value);
-    
-    if (!name || !amount || !value) {
-        alert('Preencha todos os campos obrigatórios!');
-        return;
-    }
-    
-    personalGoals.push({
-        id: Date.now(),
-        name, category, amount, date, type, value,
-        saved: 0,
-        createdAt: new Date().toISOString()
-    });
-    
-    savePersonalGoalsToStorage();
-    renderPersonalGoals();
-    updatePersonalGoalsDashboard();
-    updateHomeScreen();
-    elements.goalModal.classList.add('hidden');
-    clearGoalForm();
-    showToast('Meta cadastrada!');
-}
-
-function clearGoalForm() {
-    elements.goalName.value = '';
-    elements.goalCategory.value = 'needs';
-    elements.goalAmount.value = '';
-    elements.goalDate.value = '';
-    elements.goalType.value = 'percentage';
-    elements.goalValue.value = '';
-}
-
-function deletePersonalGoal(id) {
-    if (!confirm('Excluir esta meta?')) return;
-    personalGoals = personalGoals.filter(g => g.id !== id);
-    savePersonalGoalsToStorage();
-    renderPersonalGoals();
-    updatePersonalGoalsDashboard();
-    updateHomeScreen();
-    showToast('Meta excluída!');
-}
-
-function addSavingsToGoal(id) {
-    const amount = prompt('Quanto já economizou? (R$)');
-    if (!amount || isNaN(amount) || parseFloat(amount) <= 0) return;
-    
-    const goal = personalGoals.find(g => g.id === id);
-    if (!goal) return;
-    
-    goal.saved += parseFloat(amount);
-    savePersonalGoalsToStorage();
-    renderPersonalGoals();
-    updatePersonalGoalsDashboard();
-    updateHomeScreen();
-    showToast(`R$ ${formatCurrency(parseFloat(amount))} adicionado!`);
-}
-
-window.simulateGoal = function(id) {
-    const goal = personalGoals.find(g => g.id === id);
-    if (!goal) return;
-    
-    const remaining = goal.amount - goal.saved;
-    if (remaining <= 0) {
-        alert('Meta já concluída!');
-        return;
-    }
-    
-    let dailyValue;
-    if (goal.type === 'percentage') {
-        const history = getHistory();
-        let categoryAvg = 0;
-        let count = 0;
-        
-        history.forEach(calc => {
-            if (goal.category === 'needs') categoryAvg += calc.needsValue || 0;
-            else if (goal.category === 'wants') categoryAvg += calc.wantsValue || 0;
-            else if (goal.category === 'savings') categoryAvg += calc.savingsValue || 0;
-            count++;
+        navigator.clipboard.writeText(shareText).then(() => {
+            showToast('Dados copiados!');
         });
-        
-        categoryAvg = count > 0 ? categoryAvg / count : (goal.category === 'needs' ? 100 : goal.category === 'wants' ? 60 : 40);
-        dailyValue = (categoryAvg * goal.value) / 100;
-    } else {
-        dailyValue = goal.value;
+    }
+}
+
+// ==================== ÚLTIMOS LANÇAMENTOS (HOME) ====================
+function updateRecentTransactions() {
+    const recentContainer = document.getElementById('recentTransactions');
+    if (!recentContainer) return;
+    
+    const recent = state.transactions.slice(0, 5);
+    
+    if (recent.length === 0) {
+        recentContainer.innerHTML = '<p class="empty-message">Nenhum lançamento ainda</p>';
+        return;
     }
     
-    const daysToComplete = Math.ceil(remaining / dailyValue);
-    const completionDate = new Date();
-    completionDate.setDate(completionDate.getDate() + daysToComplete);
+    recentContainer.innerHTML = recent.map(transaction => `
+        <div class="transaction-item" style="margin-bottom: 10px;">
+            <div class="transaction-header">
+                <div class="transaction-icon ${transaction.type}" style="width: 36px; height: 36px; font-size: 0.9rem;">
+                    <i class="fas ${transaction.type === 'income' ? 'fa-arrow-up' : 'fa-arrow-down'}"></i>
+                </div>
+                <div style="flex: 1; margin-left: 12px;">
+                    <p style="font-weight: 600; color: var(--text-primary); margin: 0;">
+                        ${transaction.description}
+                    </p>
+                    <p style="font-size: 0.75rem; color: var(--text-secondary); margin: 2px 0 0;">
+                        ${formatDate(transaction.date)}
+                    </p>
+                </div>
+                <span class="transaction-amount ${transaction.type}" style="font-size: 1rem;">
+                    ${transaction.type === 'income' ? '+' : '-'} ${formatCurrency(transaction.amount)}
+                </span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ==================== MENTOR FINANCEIRO ====================
+function getMentorAdvice(incomeAmount) {
+    if (!financialMentor) return null;
     
-    elements.simulatorContent.innerHTML = `
-        <div class="simulator-info">
-            <h3>🎯 ${goal.name}</h3>
-            <p><strong>Meta:</strong> ${formatCurrency(goal.amount)}</p>
-            <p><strong>Economizado:</strong> ${formatCurrency(goal.saved)}</p>
-            <p><strong>Faltam:</strong> ${formatCurrency(remaining)}</p>
+    const advice = financialMentor.processIncome(incomeAmount);
+    return advice;
+}
+
+function showMentorAdvice(advice) {
+    if (!advice) return;
+    
+    const messageEl = document.getElementById('mentorMessage');
+    const recommendationsEl = document.getElementById('mentorRecommendations');
+    
+    if (!messageEl || !recommendationsEl) return;
+    
+    // Atualizar mensagem
+    messageEl.textContent = advice.message;
+    
+    // Mostrar recomendações
+    const reserve = advice.recommendations.reserve;
+    const available = advice.recommendations.available;
+    
+    recommendationsEl.innerHTML = `
+        <div class="recommendation-item">
+            <div class="recommendation-icon">🛡️</div>
+            <div class="recommendation-content">
+                <p class="recommendation-title">Reserva de Emergência</p>
+                <p class="recommendation-description">${reserve.reason}</p>
+            </div>
+            <p class="recommendation-amount">${formatCurrency(reserve.amount)}</p>
         </div>
-        <div class="simulator-results">
-            <h4>Com economia atual:</h4>
-            <div class="simulation-item"><span>📅 Dias:</span><strong>${daysToComplete} dias</strong></div>
-            <div class="simulation-item"><span>📆 Data:</span><strong>${formatDate(completionDate.toISOString().split('T')[0])}</strong></div>
-            <div class="simulation-item"><span>💰 Por dia:</span><strong>${formatCurrency(dailyValue)}</strong></div>
+        <div class="recommendation-item">
+            <div class="recommendation-icon">💡</div>
+            <div class="recommendation-content">
+                <p class="recommendation-title">Disponível para gastar</p>
+                <p class="recommendation-description">${available.reason}</p>
+            </div>
+            <p class="recommendation-amount">${formatCurrency(available.amount)}</p>
         </div>
-        <div class="simulator-slider">
-            <label>Simule diferentes valores:</label>
-            <input type="range" id="simSlider" min="1" max="500" value="${Math.round(dailyValue)}" step="1">
-        </div>
-        <div class="simulator-results" id="simOutput"></div>
     `;
     
-    elements.simulatorModal.classList.remove('hidden');
+    recommendationsEl.classList.remove('hidden');
     
-    const slider = document.getElementById('simSlider');
-    const output = document.getElementById('simOutput');
-    
-    function updateSim() {
-        const simDaily = parseFloat(slider.value);
-        const simDays = Math.ceil(remaining / simDaily);
-        const simDate = new Date();
-        simDate.setDate(simDate.getDate() + simDays);
-        
-        output.innerHTML = `
-            <div class="simulation-item"><span>💰 Por dia:</span><strong>${formatCurrency(simDaily)}</strong></div>
-            <div class="simulation-item"><span>📅 Dias:</span><strong>${simDays} dias</strong></div>
-            <div class="simulation-item"><span>📆 Data:</span><strong>${formatDate(simDate.toISOString().split('T')[0])}</strong></div>
-        `;
-    }
-    
-    slider.addEventListener('input', updateSim);
-    updateSim();
-};
-
-window.editPersonalGoal = function(id) {
-    const goal = personalGoals.find(g => g.id === id);
-    if (!goal) return;
-    
-    editingGoalId = id;
-    elements.editGoalName.value = goal.name;
-    elements.editGoalCategory.value = goal.category;
-    elements.editGoalAmount.value = goal.amount;
-    elements.editGoalDate.value = goal.date || '';
-    elements.editGoalType.value = goal.type;
-    elements.editGoalValue.value = goal.value;
-    elements.editGoalModal.classList.remove('hidden');
-};
-
-function saveGoalEdit() {
-    if (!editingGoalId) return;
-    
-    const goal = personalGoals.find(g => g.id === editingGoalId);
-    goal.name = elements.editGoalName.value.trim();
-    goal.category = elements.editGoalCategory.value;
-    goal.amount = parseFloat(elements.editGoalAmount.value);
-    goal.date = elements.editGoalDate.value;
-    goal.type = elements.editGoalType.value;
-    goal.value = parseFloat(elements.editGoalValue.value);
-    
-    savePersonalGoalsToStorage();
-    renderPersonalGoals();
-    updatePersonalGoalsDashboard();
-    updateHomeScreen();
-    elements.editGoalModal.classList.add('hidden');
-    editingGoalId = null;
-    showToast('Meta atualizada!');
+    // Scroll suave até o mentor
+    document.getElementById('mentorCard')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function renderPersonalGoals() {
-    if (personalGoals.length === 0) {
-        elements.goalsList.innerHTML = '<p class="empty-message">Nenhuma meta cadastrada</p>';
+function calculateAvailableBalance() {
+    // Calcular baseado em receitas e despesas
+    const totalIncome = state.transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const totalExpenses = state.transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    // Considerar 20% de reserva
+    const reserve = totalIncome * 0.2;
+    
+    return totalIncome - reserve - totalExpenses;
+}
+
+// ==================== SAÚDE FINANCEIRA ====================
+function updateHealthScreen() {
+    const score = calculateHealthScore(state);
+    const status = getHealthStatus(score);
+    
+    // Atualizar emoji e cor
+    const emojiEl = document.getElementById('healthEmoji');
+    const statusEl = document.getElementById('healthStatus');
+    const statusTextEl = document.getElementById('healthStatusText');
+    const scoreValueEl = document.getElementById('healthScoreValue');
+    const messageEl = document.getElementById('healthMessage');
+    
+    if (emojiEl) emojiEl.textContent = status.emoji;
+    if (statusTextEl) statusTextEl.textContent = status.level;
+    if (scoreValueEl) scoreValueEl.textContent = score;
+    
+    if (statusEl) {
+        statusEl.style.backgroundColor = status.color + '20';
+        statusEl.style.color = status.color;
+    }
+    
+    // Mensagem motivacional
+    if (messageEl) {
+        if (score >= 80) messageEl.textContent = 'Parabéns! Você tem uma saúde financeira excelente!';
+        else if (score >= 60) messageEl.textContent = 'Você está no bom caminho. Continue assim!';
+        else if (score >= 40) messageEl.textContent = 'Vamos melhorar! Pequenos passos geram grandes mudanças.';
+        else messageEl.textContent = 'Não desanime! Todo começo é difícil. Vamos juntos!';
+    }
+    
+    // Detalhes
+    const totalSaved = state.goals.reduce((sum, g) => sum + (g.saved || 0), 0);
+    const totalIncome = state.transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+    
+    const reservePercent = totalIncome > 0 ? Math.min(100, Math.round((totalSaved / (totalIncome * 3)) * 100)) : 0;
+    const overdueBills = state.bills.filter(b => getDaysUntilDue(b.dueDate) < 0 && !b.paid).length;
+    const billsPercent = state.bills.length === 0 ? 100 : Math.max(0, 100 - (overdueBills * 25));
+    const goalsPercent = state.goals.length === 0 ? 0 :
+        Math.round(state.goals.reduce((sum, g) => sum + (g.saved / g.amount), 0) / state.goals.length * 100);
+    const streakDays = calculateStreakDays(state);
+    const regularityPercent = Math.min(100, streakDays * 2);
+    
+    setValue('healthReserve', reservePercent + '%');
+    setValue('healthBills', billsPercent + '%');
+    setValue('healthGoals', goalsPercent + '%');
+    setValue('healthRegularity', regularityPercent + '%');
+    
+    // Recomendações
+    updateHealthRecommendations(score);
+}
+
+function updateHealthRecommendations(score) {
+    const container = document.getElementById('healthRecommendationsContent');
+    if (!container) return;
+    
+    const recommendations = [];
+    
+    if (state.goals.length === 0) {
+        recommendations.push({
+            icon: '🎯',
+            title: 'Crie sua primeira meta',
+            text: 'Metas ajudam a manter o foco. Que tal começar com R$ 500 de reserva?'
+        });
+    }
+    
+    const totalSaved = state.goals.reduce((sum, g) => sum + (g.saved || 0), 0);
+    if (totalSaved < 500) {
+        recommendations.push({
+            icon: '🛡️',
+            title: 'Construa sua reserva',
+            text: `Você tem R$ ${formatCurrency(totalSaved)} guardados. O ideal é começar com R$ 500.`
+        });
+    }
+    
+    const expenseRatio = state.transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0) / 
+        (state.transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0) || 1);
+    
+    if (expenseRatio > 0.8) {
+        recommendations.push({
+            icon: '⚠️',
+            title: 'Gastos altos',
+            text: `Você está gastando ${Math.round(expenseRatio * 100)}% da sua renda. Tente reduzir para 70%.`
+        });
+    }
+    
+    if (recommendations.length === 0) {
+        container.innerHTML = '<p class="empty-message">Ótimo trabalho! Continue mantendo suas finanças organizadas.</p>';
         return;
     }
     
-    const priorityOrder = { high: 0, medium: 1, low: 2 };
-    personalGoals.sort((a, b) => {
-        if (a.priority !== b.priority) return priorityOrder[a.priority] - priorityOrder[b.priority];
-        return new Date(a.date || '9999-12-31') - new Date(b.date || '9999-12-31');
-    });
+    container.innerHTML = recommendations.map(rec => `
+        <div class="alert" style="margin-bottom: 12px;">
+            <span style="font-size: 1.5rem;">${rec.icon}</span>
+            <div>
+                <strong style="display: block; margin-bottom: 4px; color: var(--text-primary);">${rec.title}</strong>
+                <span style="font-size: 0.875rem; color: var(--text-secondary);">${rec.text}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ==================== CONQUISTAS ====================
+function updateAchievementsScreen() {
+    const unlocked = getUnlockedAchievements();
+    const countEl = document.getElementById('achievementsCount');
+    const listEl = document.getElementById('achievementsList');
     
-    const categoryLabels = { needs: '🏠 Necessidades', wants: '🎉 Desejos', savings: '💰 Investimentos' };
-    const priorityLabels = { high: 'Alta', medium: 'Média', low: 'Baixa' };
+    if (countEl) {
+        countEl.textContent = unlocked.length;
+    }
     
-    elements.goalsList.innerHTML = personalGoals.map(goal => {
-        const remaining = goal.amount - goal.saved;
-        const progress = (goal.saved / goal.amount) * 100;
-        const isCompleted = remaining <= 0;
-        const stats = calculateGoalStats(goal);
-        
+    if (!listEl) return;
+    
+    // Verificar todas as conquistas
+    const achievements = [
+        {
+            id: 'first_income',
+            ...MENTOR_CONFIG.messages.achievements.firstIncome,
+            unlocked: state.transactions.filter(t => t.type === 'income').length >= 1
+        },
+        {
+            id: 'first_reserve_500',
+            ...MENTOR_CONFIG.messages.achievements.firstReserve,
+            unlocked: state.goals.reduce((sum, g) => sum + (g.saved || 0), 0) >= 500
+        },
+        {
+            id: 'discipline_30_days',
+            ...MENTOR_CONFIG.messages.achievements.discipline,
+            unlocked: calculateStreakDays(state) >= 30
+        },
+        {
+            id: 'first_goal',
+            ...MENTOR_CONFIG.messages.achievements.goalAchieved,
+            unlocked: state.goals.some(g => g.amount <= g.saved)
+        },
+        {
+            id: 'health_improvement',
+            ...MENTOR_CONFIG.messages.achievements.healthImprovement,
+            unlocked: calculateHealthScore(state) >= 70
+        }
+    ];
+    
+    listEl.innerHTML = achievements.map(ach => {
+        const isUnlocked = unlocked.includes(ach.id) || ach.unlocked;
         return `
-            <div class="goal-item priority-${goal.priority}">
+            <div class="goal-item" style="opacity: ${isUnlocked ? '1' : '0.5'}; margin-bottom: 12px;">
                 <div class="goal-header">
                     <div class="goal-title">
-                        <h3>${isCompleted ? '✅' : '🎯'} ${goal.name}</h3>
-                        <span style="font-size:0.75rem;color:var(--text-secondary)">${categoryLabels[goal.category]} • ${priorityLabels[goal.priority]}</span>
+                        <h3>
+                            <span class="goal-icon" style="font-size: 1.5rem; margin-right: 8px;">${ach.icon}</span>
+                            ${ach.title}
+                        </h3>
                     </div>
-                    <div class="goal-actions">
-                        <button class="btn-goal simulate" onclick="simulateGoal(${goal.id})"><i class="fas fa-calculator"></i></button>
-                    </div>
+                    ${isUnlocked ? '<i class="fas fa-check-circle" style="color: var(--success); font-size: 1.5rem;"></i>' : '<i class="fas fa-lock" style="color: var(--text-tertiary); font-size: 1.5rem;"></i>'}
                 </div>
-                <div class="goal-info">
-                    <div class="goal-info-item"><label>Meta</label><p>${formatCurrency(goal.amount)}</p></div>
-                    <div class="goal-info-item"><label>Economizado</label><p>${formatCurrency(goal.saved)}</p></div>
-                    <div class="goal-info-item"><label>Faltam</label><p>${formatCurrency(remaining)}</p></div>
-                    <div class="goal-info-item"><label>Dias</label><p>${isCompleted ? 'Concluída!' : stats.daysLeft > 0 ? `${stats.daysLeft}` : '-'}</p></div>
-                </div>
-                <div class="goal-progress">
-                    <div class="goal-progress-label">
-                        <span>${progress.toFixed(1)}%</span>
-                        <span>${formatCurrency(goal.saved)} / ${formatCurrency(goal.amount)}</span>
-                    </div>
-                    <div class="goal-progress-bar">
-                        <div class="goal-progress-fill" style="width:${progress}%">${progress >= 100 ? '✓' : `${progress.toFixed(0)}%`}</div>
-                    </div>
-                </div>
-                <div class="goal-actions-row">
-                    <button class="btn-goal add-savings" onclick="addSavingsToGoal(${goal.id})"><i class="fas fa-plus"></i> Economia</button>
-                    <button class="btn-goal edit" onclick="editPersonalGoal(${goal.id})"><i class="fas fa-edit"></i> Editar</button>
-                    <button class="btn-goal delete" onclick="deletePersonalGoal(${goal.id})"><i class="fas fa-trash"></i> Excluir</button>
-                </div>
+                <p style="color: var(--text-secondary); font-size: 0.9375rem; margin-top: 8px;">
+                    ${ach.description}
+                </p>
             </div>
         `;
     }).join('');
 }
 
-function calculateGoalStats(goal) {
-    const remaining = goal.amount - goal.saved;
-    if (remaining <= 0) return { daysLeft: 0, dailyNeeded: 0 };
+// ==================== VERIFICAR CONQUISTAS ====================
+function checkAchievements() {
+    const achievementsToCheck = [
+        { id: 'first_income', condition: state.transactions.filter(t => t.type === 'income').length >= 1 },
+        { id: 'first_reserve_500', condition: state.goals.reduce((sum, g) => sum + (g.saved || 0), 0) >= 500 },
+        { id: 'discipline_30_days', condition: calculateStreakDays(state) >= 30 },
+        { id: 'first_goal', condition: state.goals.some(g => g.amount <= g.saved) },
+        { id: 'health_improvement', condition: calculateHealthScore(state) >= 70 }
+    ];
     
-    let dailyValue;
-    if (goal.type === 'percentage') {
-        const history = getHistory();
-        let categoryAvg = 0;
-        let count = 0;
-        
-        history.forEach(calc => {
-            if (goal.category === 'needs') categoryAvg += calc.needsValue || 0;
-            else if (goal.category === 'wants') categoryAvg += calc.wantsValue || 0;
-            else if (goal.category === 'savings') categoryAvg += calc.savingsValue || 0;
-            count++;
-        });
-        
-        categoryAvg = count > 0 ? categoryAvg / count : (goal.category === 'needs' ? 100 : goal.category === 'wants' ? 60 : 40);
-        dailyValue = (categoryAvg * goal.value) / 100;
-    } else {
-        dailyValue = goal.value;
-    }
-    
-    const daysLeft = Math.ceil(remaining / dailyValue);
-    return { daysLeft, dailyNeeded: remaining / daysLeft };
-}
-
-function updatePersonalGoalsDashboard() {
-    const total = personalGoals.length;
-    const completed = personalGoals.filter(g => g.amount - g.saved <= 0).length;
-    const totalSavedValue = personalGoals.reduce((sum, g) => sum + g.saved, 0);
-    
-    const activeGoals = personalGoals.filter(g => g.amount - g.saved > 0);
-    let nextGoalText = '-';
-    
-    if (activeGoals.length > 0) {
-        const closest = activeGoals.reduce((closest, goal) => {
-            const stats = calculateGoalStats(goal);
-            if (!closest || stats.daysLeft < closest.daysLeft) return { goal, daysLeft: stats.daysLeft };
-            return closest;
-        }, null);
-        
-        if (closest && closest.daysLeft > 0) nextGoalText = `${closest.daysLeft}d`;
-    }
-    
-    elements.totalGoals.textContent = total;
-    elements.completedGoals.textContent = completed;
-    elements.totalSavedEl.textContent = formatCurrency(totalSavedValue);
-    elements.nextGoal.textContent = nextGoalText;
-}
-
-// ==================== METAS PADRÃO ====================
-function updateGoals() {
-    localStorage.setItem(`${STORAGE_KEY}_goals`, JSON.stringify({
-        emergency: parseFloat(elements.emergencyGoal.value) || 0,
-        investment: parseFloat(elements.investmentGoal.value) || 0,
-        purchase: parseFloat(elements.purchaseGoal.value) || 0
-    }));
-}
-
-function loadGoals() {
-    const goals = JSON.parse(localStorage.getItem(`${STORAGE_KEY}_goals`) || '{}');
-    if (goals.emergency) elements.emergencyGoal.value = goals.emergency;
-    if (goals.investment) elements.investmentGoal.value = goals.investment;
-    if (goals.purchase) elements.purchaseGoal.value = goals.purchase;
-}
-
-function saveSettings() {
-    updateGoals();
-    showToast('Configurações salvas!');
-}
-
-// ==================== ATUALIZAR PROGRESSO POR CATEGORIA ====================
-function updateGoalProgress() {
-    const history = getHistory();
-    
-    personalGoals.forEach(goal => goal.saved = 0);
-    
-    history.forEach(calculation => {
-        personalGoals.forEach(goal => {
-            if (goal.type === 'percentage') {
-                let categoryValue = 0;
-                if (goal.category === 'needs') categoryValue = calculation.needsValue || 0;
-                else if (goal.category === 'wants') categoryValue = calculation.wantsValue || 0;
-                else if (goal.category === 'savings') categoryValue = calculation.savingsValue || 0;
-                
-                goal.saved += (categoryValue * goal.value) / 100;
+    achievementsToCheck.forEach(ach => {
+        if (ach.condition && saveAchievement(ach.id)) {
+            const achievement = ACHIEVEMENTS[ach.id.toUpperCase()];
+            if (achievement) {
+                showToast(`🏆 Conquista desbloqueada: ${achievement.title}!`);
             }
-        });
+        }
     });
-    
-    savePersonalGoalsToStorage();
 }
 
-// ==================== ALERTAS ====================
-function generateAlerts(result) {
-    const alerts = [];
-    if (result.savingsPercent >= 20) {
-        alerts.push({ type: 'success', icon: 'fa-check-circle', message: `Excelente! Economizando ${result.savingsPercent}%` });
-    }
-    if (result.wantsPercent > 30) {
-        alerts.push({ type: 'warning', icon: 'fa-exclamation-triangle', message: 'Gastos com desejos elevados' });
-    }
-    displayAlerts(alerts);
-}
-
-function displayAlerts(alerts) {
-    elements.alertContainer.innerHTML = alerts.map(alert => `
-        <div class="alert ${alert.type}">
-            <i class="fas ${alert.icon}"></i>
-            <span>${alert.message}</span>
-        </div>
-    `).join('');
-}
-
-// ==================== HISTÓRICO ====================
-function saveToHistory(result) {
-    const history = getHistory();
-    history.unshift(result);
-    localStorage.setItem(`${STORAGE_KEY}_history`, JSON.stringify(history));
-    renderHistory();
-}
-
-function getHistory() {
-    return JSON.parse(localStorage.getItem(`${STORAGE_KEY}_history`) || '[]');
-}
-
-function renderHistory() {
-    const history = getHistory();
-    if (history.length === 0) {
-        elements.historyList.innerHTML = '<p class="empty-message">Nenhum cálculo realizado</p>';
-        return;
-    }
-    
-    elements.historyList.innerHTML = history.map(item => `
-        <div class="history-item">
-            <div class="history-info">
-                <h4>${formatDate(item.date)} - ${item.incomeType}</h4>
-                <p><strong>Valor:</strong> ${formatCurrency(item.amount)}</p>
-                <p><strong>Divisão:</strong> ${item.divisionMethod}</p>
-                <p><strong>Necessidades:</strong> ${formatCurrency(item.needsValue)} | <strong>Desejos:</strong> ${formatCurrency(item.wantsValue)} | <strong>Investimentos:</strong> ${formatCurrency(item.savingsValue)}</p>
-                ${item.description ? `<p><strong>Descrição:</strong> ${item.description}</p>` : ''}
-            </div>
-            <div class="history-actions">
-                <button class="btn-icon" onclick="editItem(${item.id})"><i class="fas fa-edit"></i></button>
-                <button class="btn-icon danger" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>
-            </div>
-        </div>
-    `).join('');
-}
-
-window.editItem = function(id) {
-    const item = getHistory().find(h => h.id === id);
-    if (!item) return;
-    
-    editingId = id;
-    elements.editAmount.value = item.amount;
-    elements.editIncomeType.value = {'Diário':'daily','Semanal':'weekly','Quinzenal':'biweekly','Mensal':'monthly','Outro':'other'}[item.incomeType] || 'monthly';
-    elements.editDescription.value = item.description || '';
-    elements.editModal.classList.remove('hidden');
-};
-
-function saveEdit() {
-    if (!editingId) return;
-    
-    const history = getHistory();
-    const index = history.findIndex(h => h.id === editingId);
-    history[index].amount = parseFloat(elements.editAmount.value);
-    history[index].description = elements.editDescription.value;
-    
-    elements.amount.value = history[index].amount;
-    elements.description.value = history[index].description;
-    elements.incomeType.value = {'Diário':'daily','Semanal':'weekly','Quinzenal':'biweekly','Mensal':'monthly','Outro':'other'}[history[index].incomeType] || 'monthly';
-    
-    calculate();
-    localStorage.setItem(`${STORAGE_KEY}_history`, JSON.stringify(history));
-    elements.editModal.classList.add('hidden');
-    showToast('Cálculo atualizado!');
-}
-
-window.deleteItem = function(id) {
-    if (!confirm('Excluir este cálculo?')) return;
-    const history = getHistory().filter(item => item.id !== id);
-    localStorage.setItem(`${STORAGE_KEY}_history`, JSON.stringify(history));
-    renderHistory();
+// ==================== INICIALIZAÇÃO DE ELEMENTOS ====================
+function init() {
     updateHomeScreen();
-    updateMonthlyTotal();
-};
-
-function clearHistory() {
-    if (!confirm('Limpar todo o histórico?')) return;
-    localStorage.removeItem(`${STORAGE_KEY}_history`);
-    renderHistory();
-    updateHomeScreen();
-    updateMonthlyTotal();
-}
-
-// ==================== EXPORTAR ====================
-function copyResult() {
-    if (!currentResult) return;
-    const text = `📊 DIVISÃO DE GANHOS\n\n💰 Total: ${formatCurrency(currentResult.amount)}\n\n🏠 Necessidades: ${formatCurrency(currentResult.needsValue)} (${currentResult.needsPercent}%)\n🎉 Desejos: ${formatCurrency(currentResult.wantsValue)} (${currentResult.wantsPercent}%)\n💰 Investimentos: ${formatCurrency(currentResult.savingsValue)} (${currentResult.savingsPercent}%)\n\n✅ Distribuído: ${formatCurrency(currentResult.totalDistributed)}${currentResult.remaining > 0 ? `\n💵 Restante: ${formatCurrency(currentResult.remaining)}` : ''}`;
+    updateTransactionsList();
+    updateGoalsList();
+    updateHistoryList();
+    updateWalletsList();
+    updateBillsList();
+    updateGoalsDashboard();
+    updateRecentTransactions();
+    updateFinanceChart();
     
-    navigator.clipboard.writeText(text).then(() => showToast('Copiado!')).catch(() => alert('Erro ao copiar'));
+    // Inicializar mentor com os dados
+    if (typeof initMentorWithData === 'function') {
+        initMentorWithData();
+    }
+    
+    // Verificar conquistas
+    checkAchievements();
 }
 
-function shareWhatsApp() {
-    if (!currentResult) return;
-    const text = encodeURIComponent(`📊 *Divisão de Ganhos*\n\n💰 Total: ${formatCurrency(currentResult.amount)}\n\n🏠 Necessidades: ${formatCurrency(currentResult.needsValue)} (${currentResult.needsPercent}%)\n🎉 Desejos: ${formatCurrency(currentResult.wantsValue)} (${currentResult.wantsPercent}%)\n💰 Investimentos: ${formatCurrency(currentResult.savingsValue)} (${currentResult.savingsPercent}%)\n\n✅ Distribuído: ${formatCurrency(currentResult.totalDistributed)}`);
-    window.open(`https://wa.me/?text=${text}`, '_blank');
+// Executar após DOM carregado
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
 }
-
-function exportPDF() {
-    if (!currentResult) return;
-    showToast('Preparando PDF...');
-    setTimeout(() => window.print(), 500);
-}
-
-// ==================== UTILITÁRIOS ====================
-function formatCurrency(value) {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-}
-
-function formatDate(dateStr) {
-    const [year, month, day] = dateStr.split('-');
-    return `${day}/${month}/${year}`;
-}
-
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:12px 24px;border-radius:25px;box-shadow:0 4px 12px rgba(0,0,0,0.3);z-index:10000;animation:slideInRight 0.3s ease;font-weight:600;font-size:0.9rem';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => { toast.style.animation = 'fadeIn 0.3s ease reverse'; setTimeout(() => toast.remove(), 300); }, 2500);
-}
-
-// ==================== LOCAL STORAGE ====================
-function savePersonalGoalsToStorage() {
-    localStorage.setItem(`${STORAGE_KEY}_personalGoals`, JSON.stringify(personalGoals));
-}
-
-function loadPersonalGoals() {
-    const saved = localStorage.getItem(`${STORAGE_KEY}_personalGoals`);
-    personalGoals = saved ? JSON.parse(saved) : [];
-    renderPersonalGoals();
-    updatePersonalGoalsDashboard();
-}
-
-// ==================== PRINT STYLES ====================
-const printStyles = document.createElement('style');
-printStyles.textContent = `@media print { body { background: white !important; } .bottom-nav, .theme-toggle, .btn-add, .action-buttons, .goal-actions-row, .history-actions { display: none !important; } .screen { display: block !important; } }`;
-document.head.appendChild(printStyles);

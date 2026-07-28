@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Calculadora de Ganhos</title>
-    <link rel="icon" type="image/png" href="img/ChatGPT Image 29 de jun. de 2026, 17_29_58.png">
+    <title>EU SEI GERIR - Assistente Financeiro</title>
+    <link rel="icon" type="image/png" href="img/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,250 +12,213 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <img src="img/logo.png" alt="Eu Sei Gerir" class="splash-logo">
+            <h1 class="splash-title">Eu Sei Gerir</h1>
+            <p class="splash-subtitle">Assistente Financeiro Inteligente</p>
+            <button class="splash-button" id="startButton">
+                Começar
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
     <div class="app-container">
-        <!-- Tela Início -->
+        
+        <!-- ========== TELA HOME (DASHBOARD) ========== -->
         <div class="screen active" id="homeScreen">
             <header class="screen-header">
-                <h1><i class="fas fa-calculator"></i> EU SEI GERIR</h1>
+                <div class="header-brand">
+                    <img src="img/logo.png" alt="Eu Sei Gerir" class="logo">
+                    <h1>EU SEI GERIR</h1>
+                </div>
                 <button class="theme-toggle" id="themeToggle">
                     <i class="fas fa-moon"></i>
                 </button>
             </header>
 
             <div class="screen-content">
-                <!-- Card Principal - Total do Mês -->
-                <div class="dashboard-main-card">
-                    <div class="card-icon-img">
-                        <img src="img/ChatGPT Image 29 de jun. de 2026, 17_29_58.png" alt="Calculadora">
-                    </div>
-                    <div class="card-content">
-                        <h3>Total Recebido no Mês</h3>
-                        <p class="main-value" id="monthlyTotal">R$ 0,00</p>
-                        <span class="card-subtitle">Atualizado em tempo real</span>
-                    </div>
+                <!-- Boas-vindas -->
+                <div class="welcome-section">
+                    <p class="welcome-text" id="welcomeText">Bom dia!</p>
+                    <p class="welcome-subtitle">Vamos organizar suas finanças hoje?</p>
                 </div>
 
-                <!-- Card de Motivação -->
-                <div class="motivation-card">
-                    <div class="motivation-header">
-                        <div class="motivation-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3>Dica do Dia</h3>
-                    </div>
-                    <div class="motivation-content">
-                        <p class="motivation-text" id="motivationText">
-                            Cada real economizado hoje aproxima você dos seus sonhos.
-                        </p>
-                        <button class="btn-motivation" id="newMotivationBtn">
-                            <i class="fas fa-sync-alt"></i> Nova Mensagem
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Painel de Metas Resumo -->
-                <div class="card" id="goalsSummaryCard">
-                    <div class="card-header">
+                <!-- Cards de Ação Rápida -->
+                <div class="quick-actions">
+                    <button class="quick-action-btn income" onclick="openIncomeModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Receita</span>
+                    </button>
+                    <button class="quick-action-btn expense" onclick="openExpenseModal()">
+                        <i class="fas fa-minus-circle"></i>
+                        <span>Despesa</span>
+                    </button>
+                    <button class="quick-action-btn tools" onclick="navigateTo('toolsScreen')">
+                        <i class="fas fa-calculator"></i>
+                        <span>Divisão</span>
+                    </button>
+                    <button class="quick-action-btn goals" onclick="navigateTo('goalsScreen')">
                         <i class="fas fa-bullseye"></i>
-                        <h2>🎯 Suas Metas</h2>
+                        <span>Meta</span>
+                    </button>
+                </div>
+
+                <!-- Card Resumo Financeiro -->
+                <div class="card balance-card">
+                    <div class="balance-header">
+                        <span class="balance-label">Patrimônio Total</span>
+                        <span class="balance-trend positive">
+                            <i class="fas fa-arrow-up"></i> +12.5%
+                        </span>
                     </div>
-                    <div class="card-content" id="goalsSummaryContent">
-                        <div class="goals-summary-stats">
-                            <div class="stat-item">
-                                <span class="stat-label">Metas Ativas</span>
-                                <span class="stat-value" id="activeGoalsCount">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Total Reservado</span>
-                                <span class="stat-value" id="totalReserved">R$ 0</span>
-                            </div>
+                    <h2 class="balance-value" id="totalWealth">R$ 0,00</h2>
+                    <div class="balance-details">
+                        <span class="balance-text">Saldo Disponível</span>
+                        <span class="balance-amount" id="availableBalance">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <!-- Cards de Estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card income">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-up"></i>
                         </div>
-                        <div class="next-goal-info" id="nextGoalInfo">
-                            <p class="next-goal-label">Próxima Meta:</p>
-                            <p class="next-goal-name" id="nextGoalName">Nenhuma meta ativa</p>
-                            <div class="next-goal-details" id="nextGoalDetails">
-                                <span id="nextGoalRemaining">Faltam: R$ 0</span>
-                                <span id="nextGoalDays">Previsão: -</span>
-                            </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Receitas (Mês)</p>
+                            <h3 class="stat-value" id="monthIncome">R$ 0,00</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card expense">
+                        <div class="stat-icon">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Despesas (Mês)</p>
+                            <h3 class="stat-value" id="monthExpenses">R$ 0,00</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card profit">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Lucro Líquido</p>
+                            <h3 class="stat-value" id="monthProfit">R$ 0,00</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card savings">
+                        <div class="stat-icon">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Economia</p>
+                            <h3 class="stat-value" id="monthSavings">R$ 0,00</h3>
                         </div>
                     </div>
                 </div>
 
-                <!-- Último Cálculo -->
-                <div class="card" id="lastCalculationCard">
-                    <div class="card-header">
-                        <i class="fas fa-chart-pie"></i>
-                        <h2>Última Divisão</h2>
-                    </div>
-                    <div class="card-content">
-                        <div class="result-item">
-                            <span class="label">🏠 Necessidades</span>
-                            <span class="value" id="needsValue">R$ 0,00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">🎉 Desejos</span>
-                            <span class="value" id="wantsValue">R$ 0,00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="label">💰 Investimentos</span>
-                            <span class="value" id="savingsValue">R$ 0,00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tela Ganhos -->
-        <div class="screen" id="incomeScreen">
-            <header class="screen-header">
-                <h1><i class="fas fa-dollar-sign"></i> Ganhos</h1>
-            </header>
-
-            <div class="screen-content">
+                <!-- Gráfico Financeiro -->
                 <div class="card">
                     <div class="card-header">
-                        <h2>Novo Cálculo</h2>
-                    </div>
-                    <div class="card-content">
-                        <div class="form-group">
-                            <label for="amount">Valor Recebido (R$)</label>
-                            <input type="number" id="amount" placeholder="Ex: 5000.00" step="0.01" min="0" inputmode="decimal">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="incomeType">Tipo de Ganho</label>
-                            <select id="incomeType">
-                                <option value="daily">Diário</option>
-                                <option value="weekly">Semanal</option>
-                                <option value="biweekly">Quinzenal</option>
-                                <option value="monthly" selected>Mensal</option>
-                                <option value="other">Outro</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="divisionMethod">Método de Divisão</label>
-                            <select id="divisionMethod">
-                                <option value="50-30-20">50 / 30 / 20</option>
-                                <option value="60-20-20">60 / 20 / 20</option>
-                                <option value="70-20-10">70 / 20 / 10</option>
-                                <option value="custom">Personalizado</option>
-                            </select>
-                        </div>
-
-                        <div id="customInputs" class="custom-inputs hidden">
-                            <div class="form-group">
-                                <label>Necessidades (%)</label>
-                                <input type="number" id="customNeeds" placeholder="50" min="0" max="100" value="50">
-                            </div>
-                            <div class="form-group">
-                                <label>Desejos (%)</label>
-                                <input type="number" id="customWants" placeholder="30" min="0" max="100" value="30">
-                            </div>
-                            <div class="form-group">
-                                <label>Investimentos (%)</label>
-                                <input type="number" id="customSavings" placeholder="20" min="0" max="100" value="20">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="date">Data</label>
-                            <input type="date" id="date">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="description">Descrição (opcional)</label>
-                            <input type="text" id="description" placeholder="Ex: Salário">
-                        </div>
-
-                        <button class="btn-primary" id="calculateBtn">
-                            <i class="fas fa-calculator"></i> Calcular
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Resultado -->
-                <div class="card hidden" id="resultCard">
-                    <div class="card-header">
-                        <h2>Resultado</h2>
+                        <i class="fas fa-chart-bar"></i>
+                        <h2>Visão Geral do Mês</h2>
                     </div>
                     <div class="card-content">
                         <div class="chart-container">
-                            <canvas id="pieChart"></canvas>
-                        </div>
-
-                        <div class="results-cards">
-                            <div class="result-card needs">
-                                <div class="result-card-icon">
-                                    <i class="fas fa-home"></i>
-                                </div>
-                                <div class="result-card-content">
-                                    <p class="label">Necessidades</p>
-                                    <p class="value" id="needsValueCard">R$ 0,00</p>
-                                    <p class="percentage" id="needsPercent">0%</p>
-                                </div>
-                            </div>
-
-                            <div class="result-card wants">
-                                <div class="result-card-icon">
-                                    <i class="fas fa-party-horn"></i>
-                                </div>
-                                <div class="result-card-content">
-                                    <p class="label">Desejos</p>
-                                    <p class="value" id="wantsValueCard">R$ 0,00</p>
-                                    <p class="percentage" id="wantsPercent">0%</p>
-                                </div>
-                            </div>
-
-                            <div class="result-card savings">
-                                <div class="result-card-icon">
-                                    <i class="fas fa-piggy-bank"></i>
-                                </div>
-                                <div class="result-card-content">
-                                    <p class="label">Investimentos</p>
-                                    <p class="value" id="savingsValueCard">R$ 0,00</p>
-                                    <p class="percentage" id="savingsPercent">0%</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="progress-bars">
-                            <div class="progress-item">
-                                <div class="progress-bar">
-                                    <div class="progress-fill needs" id="needsBar"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-bar">
-                                    <div class="progress-fill wants" id="wantsBar"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-bar">
-                                    <div class="progress-fill savings" id="savingsBar"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="alert-container" id="alertContainer"></div>
-
-                        <div class="action-buttons">
-                            <button class="btn-secondary" id="copyBtn">
-                                <i class="fas fa-copy"></i> Copiar
-                            </button>
-                            <button class="btn-whatsapp" id="whatsappBtn">
-                                <i class="fab fa-whatsapp"></i> WhatsApp
-                            </button>
-                            <button class="btn-pdf" id="pdfBtn">
-                                <i class="fas fa-file-pdf"></i> PDF
-                            </button>
+                            <canvas id="financeChart"></canvas>
                         </div>
                     </div>
+                </div>
+
+                <!-- Meta Principal -->
+                <div class="card primary-goal-card" id="primaryGoalCard">
+                    <div class="card-header">
+                        <i class="fas fa-star"></i>
+                        <h2>Meta Principal</h2>
+                    </div>
+                    <div class="card-content" id="primaryGoalContent">
+                        <p class="no-goal-message">Nenhuma meta definida. Crie sua primeira meta!</p>
+                    </div>
+                </div>
+
+                <!-- Contas Vencendo -->
+                <div class="card bills-card" id="billsCard">
+                    <div class="card-header">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h2>Contas Próximas</h2>
+                    </div>
+                    <div class="card-content" id="billsContent">
+                        <p class="no-bills-message">Nenhuma conta cadastrada</p>
+                    </div>
+                </div>
+
+                <!-- Últimos Lançamentos -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list"></i>
+                        <h2>Últimos Lançamentos</h2>
+                        <button class="btn-view-all" onclick="navigateTo('historyScreen')">
+                            Ver todos <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="card-content" id="recentTransactions">
+                        <p class="empty-message">Nenhum lançamento ainda</p>
+                    </div>
+                </div>
+
+                <!-- Card do Mentor -->
+                <div class="mentor-card" id="mentorCard">
+                    <div class="mentor-header">
+                        <div class="mentor-icon">🧠</div>
+                        <div class="mentor-content">
+                            <h3 class="mentor-title">Meu Mentor</h3>
+                            <p class="mentor-message" id="mentorMessage">
+                                Olá! Vou te ajudar a organizar suas finanças. Quando você receber dinheiro, vou te mostrar a melhor forma de usar.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mentor-recommendations hidden" id="mentorRecommendations">
+                        <!-- Recomendações serão inseridas aqui -->
+                    </div>
+                </div>
+
+                <!-- Compartilhar App -->
+                <button class="btn-primary" onclick="shareApp()" style="margin-top: 8px;">
+                    <i class="fas fa-share-nodes"></i>
+                    <span>Compartilhar o Eu Sei Gerir</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ========== TELA LANÇAMENTOS ========== -->
+        <div class="screen" id="transactionsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-exchange-alt"></i> Lançamentos</h1>
+            </header>
+
+            <div class="screen-content">
+                <!-- Filtros -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">Todos</button>
+                    <button class="filter-tab" data-filter="income">Receitas</button>
+                    <button class="filter-tab" data-filter="expense">Despesas</button>
+                </div>
+
+                <!-- Lista de Transações -->
+                <div class="transactions-list" id="transactionsList">
+                    <p class="empty-message">Nenhum lançamento registrado</p>
                 </div>
             </div>
         </div>
 
-        <!-- Tela Metas -->
+        <!-- ========== TELA METAS ========== -->
         <div class="screen" id="goalsScreen">
             <header class="screen-header">
                 <h1><i class="fas fa-bullseye"></i> Metas</h1>
@@ -265,38 +228,57 @@
             </header>
 
             <div class="screen-content">
-                <!-- Dashboard -->
-                <div class="dashboard-cards">
-                    <div class="dashboard-card">
-                        <i class="fas fa-trophy"></i>
-                        <p class="dashboard-value" id="totalGoals">0</p>
-                        <p class="dashboard-label">Total</p>
+                <!-- Dashboard de Metas -->
+                <div class="goals-dashboard">
+                    <div class="goal-stat-card">
+                        <div class="goal-stat-icon active">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="goal-stat-content">
+                            <p class="goal-stat-label">Metas Ativas</p>
+                            <h3 class="goal-stat-value" id="activeGoalsCount">0</h3>
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <i class="fas fa-check"></i>
-                        <p class="dashboard-value" id="completedGoals">0</p>
-                        <p class="dashboard-label">Concluídas</p>
+
+                    <div class="goal-stat-card">
+                        <div class="goal-stat-icon completed">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="goal-stat-content">
+                            <p class="goal-stat-label">Concluídas</p>
+                            <h3 class="goal-stat-value" id="completedGoals">0</h3>
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <i class="fas fa-piggy-bank"></i>
-                        <p class="dashboard-value" id="totalSaved">R$ 0</p>
-                        <p class="dashboard-label">Economizado</p>
+
+                    <div class="goal-stat-card">
+                        <div class="goal-stat-icon saved">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="goal-stat-content">
+                            <p class="goal-stat-label">Economizado</p>
+                            <h3 class="goal-stat-value" id="totalGoalsSaved">R$ 0</h3>
+                        </div>
                     </div>
-                    <div class="dashboard-card">
-                        <i class="fas fa-clock"></i>
-                        <p class="dashboard-value" id="nextGoal">-</p>
-                        <p class="dashboard-label">Próxima</p>
+
+                    <div class="goal-stat-card">
+                        <div class="goal-stat-icon next">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="goal-stat-content">
+                            <p class="goal-stat-label">Próxima</p>
+                            <h3 class="goal-stat-value" id="nextGoalTime">-</h3>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Lista de Metas -->
                 <div class="goals-list" id="goalsList">
-                    <p class="empty-message">Nenhuma meta cadastrada</p>
+                    <p class="empty-message">Nenhuma meta cadastrada. Crie sua primeira meta!</p>
                 </div>
             </div>
         </div>
 
-        <!-- Tela Histórico -->
+        <!-- ========== TELA HISTÓRICO ========== -->
         <div class="screen" id="historyScreen">
             <header class="screen-header">
                 <h1><i class="fas fa-history"></i> Histórico</h1>
@@ -306,217 +288,461 @@
             </header>
 
             <div class="screen-content">
+                <!-- Filtros de Período -->
+                <div class="period-filters">
+                    <button class="period-btn active" data-period="all">Todos</button>
+                    <button class="period-btn" data-period="today">Hoje</button>
+                    <button class="period-btn" data-period="week">Semana</button>
+                    <button class="period-btn" data-period="month">Mês</button>
+                    <button class="period-btn" data-period="year">Ano</button>
+                </div>
+
+                <!-- Filtros de Tipo -->
+                <div class="type-filters">
+                    <button class="type-btn active" data-type="all">Todos</button>
+                    <button class="type-btn" data-type="income">Receitas</button>
+                    <button class="type-btn" data-type="expense">Despesas</button>
+                    <button class="type-btn" data-type="goal">Metas</button>
+                </div>
+
+                <!-- Lista Histórico -->
                 <div class="history-list" id="historyList">
-                    <p class="empty-message">Nenhum cálculo realizado</p>
+                    <p class="empty-message">Nenhum lançamento realizado</p>
                 </div>
             </div>
         </div>
 
-        <!-- Tela Configurações -->
-        <div class="screen" id="settingsScreen">
+        <!-- ========== TELA FERRAMENTAS ========== -->
+        <div class="screen" id="toolsScreen">
             <header class="screen-header">
-                <h1><i class="fas fa-cog"></i> Config</h1>
+                <h1><i class="fas fa-tools"></i> Ferramentas</h1>
             </header>
 
             <div class="screen-content">
-                <div class="settings-group">
-                    <h3>Metas Padrão</h3>
-                    
-                    <div class="form-group">
-                        <label for="emergencyGoal">Reserva de Emergência (R$)</label>
-                        <input type="number" id="emergencyGoal" placeholder="Ex: 10000" step="0.01" min="0" inputmode="decimal">
+                <!-- Calculadora de Divisão -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-calculator"></i>
+                        <h2>Calculadora de Divisão</h2>
                     </div>
+                    <div class="card-content">
+                        <div class="form-group">
+                            <label for="toolAmount">Valor Total (R$)</label>
+                            <input type="number" id="toolAmount" placeholder="Ex: 5000.00" step="0.01" min="0">
+                        </div>
 
-                    <div class="form-group">
-                        <label for="investmentGoal">Investimentos (R$)</label>
-                        <input type="number" id="investmentGoal" placeholder="Ex: 20000" step="0.01" min="0" inputmode="decimal">
+                        <div class="form-group">
+                            <label for="toolDivision">Método de Divisão</label>
+                            <select id="toolDivision">
+                                <option value="50-30-20">50 / 30 / 20</option>
+                                <option value="60-20-20">60 / 20 / 20</option>
+                                <option value="70-20-10">70 / 20 / 10</option>
+                                <option value="custom">Personalizado</option>
+                            </select>
+                        </div>
+
+                        <div id="customToolInputs" class="custom-inputs hidden">
+                            <div class="form-group">
+                                <label>Necessidades (%)</label>
+                                <input type="number" id="customNeeds" value="50" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Desejos (%)</label>
+                                <input type="number" id="customWants" value="30" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Investimentos (%)</label>
+                                <input type="number" id="customSavings" value="20" min="0" max="100">
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" id="calculateToolBtn">
+                            <i class="fas fa-calculator"></i> Calcular
+                        </button>
+
+                        <div class="result-tool hidden" id="toolResult">
+                            <div class="result-tool-item">
+                                <span class="result-label">Necessidades</span>
+                                <span class="result-value" id="toolNeedsValue">R$ 0,00</span>
+                            </div>
+                            <div class="result-tool-item">
+                                <span class="result-label">Desejos</span>
+                                <span class="result-value" id="toolWantsValue">R$ 0,00</span>
+                            </div>
+                            <div class="result-tool-item">
+                                <span class="result-label">Investimentos</span>
+                                <span class="result-value" id="toolSavingsValue">R$ 0,00</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="purchaseGoal">Compras Futuras (R$)</label>
-                        <input type="number" id="purchaseGoal" placeholder="Ex: 5000" step="0.01" min="0" inputmode="decimal">
-                    </div>
-
-                    <button class="btn-primary" id="saveSettingsBtn">
-                        <i class="fas fa-save"></i> Salvar
-                    </button>
                 </div>
 
-                <div class="settings-group">
-                    <h3>Sobre</h3>
-                    <p class="settings-info">Calculadora de Ganhos v1.0</p>
-                    <p class="settings-info">Desenvolvido para ajudar no controle financeiro pessoal.</p>
+                <!-- Exportar -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-file-export"></i>
+                        <h2>Exportar Dados</h2>
+                    </div>
+                    <div class="card-content">
+                        <div class="export-options">
+                            <button class="export-btn" onclick="exportData('pdf')">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>Exportar PDF</span>
+                            </button>
+                            <button class="export-btn" onclick="exportData('csv')">
+                                <i class="fas fa-file-csv"></i>
+                                <span>Exportar CSV</span>
+                            </button>
+                            <button class="export-btn" onclick="exportData('share')">
+                                <i class="fas fa-share-alt"></i>
+                                <span>Compartilhar</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Barra de Navegação -->
+        <!-- Tela Carteiras -->
+        <div class="screen" id="walletsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-wallet"></i> Carteiras</h1>
+                <button class="btn-add" id="addWalletBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </header>
+
+            <div class="screen-content">
+                <div class="wallets-grid" id="walletsList">
+                    <p class="empty-message">Nenhuma carteira cadastrada</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tela Contas -->
+        <div class="screen" id="billsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-calendar-check"></i> Contas</h1>
+                <button class="btn-add" id="addBillBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </header>
+
+            <div class="screen-content">
+                <div class="bills-list" id="billsList">
+                    <p class="empty-message">Nenhuma conta cadastrada</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TELA SAÚDE FINANCEIRA ========== -->
+        <div class="screen" id="healthScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-heartbeat"></i> Saúde Financeira</h1>
+            </header>
+
+            <div class="screen-content">
+                <!-- Card de Score -->
+                <div class="health-score-card" id="healthScoreCard">
+                    <div class="health-score-header">
+                        <span class="health-score-emoji" id="healthEmoji">🟢</span>
+                        <h2 class="health-score-title">Seu Score</h2>
+                    </div>
+                    
+                    <div class="health-score-circle">
+                        <span class="health-score-value" id="healthScoreValue">0</span>
+                        <span class="health-score-label">de 100</span>
+                    </div>
+                    
+                    <div class="health-status" id="healthStatus">
+                        <span id="healthStatusText">Calculando...</span>
+                    </div>
+                    
+                    <p class="health-message" id="healthMessage" style="color: var(--text-secondary); font-size: 0.9375rem; margin-top: 12px;">
+                        Continue organizando suas finanças para melhorar seu score!
+                    </p>
+                    
+                    <div class="health-details">
+                        <div class="health-detail-item">
+                            <span class="health-detail-icon">🛡️</span>
+                            <span class="health-detail-label">Reserva</span>
+                            <span class="health-detail-value" id="healthReserve">0%</span>
+                        </div>
+                        <div class="health-detail-item">
+                            <span class="health-detail-icon">📋</span>
+                            <span class="health-detail-label">Contas</span>
+                            <span class="health-detail-value" id="healthBills">0%</span>
+                        </div>
+                        <div class="health-detail-item">
+                            <span class="health-detail-icon">🎯</span>
+                            <span class="health-detail-label">Metas</span>
+                            <span class="health-detail-value" id="healthGoals">0%</span>
+                        </div>
+                        <div class="health-detail-item">
+                            <span class="health-detail-icon">🔥</span>
+                            <span class="health-detail-label">Regularidade</span>
+                            <span class="health-detail-value" id="healthRegularity">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recomendações do Mentor -->
+                <div class="card" id="healthRecommendations">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <h2>Recomendações</h2>
+                    </div>
+                    <div class="card-content" id="healthRecommendationsContent">
+                        <p class="empty-message">Adicione receitas e metas para ver recomendações personalizadas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== TELA CONQUISTAS ========== -->
+        <div class="screen" id="achievementsScreen">
+            <header class="screen-header">
+                <h1><i class="fas fa-trophy"></i> Conquistas</h1>
+            </header>
+
+            <div class="screen-content">
+                <!-- Resumo -->
+                <div class="card" style="background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);">
+                    <div class="card-content" style="text-align: center; padding: 20px 0;">
+                        <div style="font-size: 3rem; margin-bottom: 12px;">🏆</div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                            Suas Conquistas
+                        </h3>
+                        <p style="color: var(--text-secondary); font-size: 0.9375rem;">
+                            Você desbloqueou <span id="achievementsCount" style="font-weight: 700; color: var(--primary);">0</span> de <span id="achievementsTotal">5</span> conquistas
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Lista de Conquistas -->
+                <div id="achievementsList" style="margin-top: 20px;">
+                    <!-- Conquistas serão inseridas aqui -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== BARRA DE NAVEGAÇÃO ========== -->
         <nav class="bottom-nav">
             <button class="nav-item active" data-screen="homeScreen">
                 <i class="fas fa-home"></i>
                 <span>Início</span>
             </button>
-            <button class="nav-item" data-screen="incomeScreen">
-                <i class="fas fa-dollar-sign"></i>
-                <span>Ganhos</span>
+            <button class="nav-item" data-screen="transactionsScreen">
+                <i class="fas fa-list"></i>
+                <span>Lançamentos</span>
             </button>
             <button class="nav-item" data-screen="goalsScreen">
                 <i class="fas fa-bullseye"></i>
                 <span>Metas</span>
             </button>
-            <button class="nav-item" data-screen="historyScreen">
-                <i class="fas fa-history"></i>
-                <span>Histórico</span>
+            <button class="nav-item" data-screen="healthScreen">
+                <i class="fas fa-heartbeat"></i>
+                <span>Saúde</span>
             </button>
-            <button class="nav-item" data-screen="settingsScreen">
-                <i class="fas fa-cog"></i>
-                <span>Config</span>
+            <button class="nav-item" data-screen="achievementsScreen">
+                <i class="fas fa-trophy"></i>
+                <span>Conquistas</span>
             </button>
         </nav>
     </div>
 
-    <!-- Modal Nova Meta -->
-    <div class="modal hidden" id="goalModal">
+    <!-- ========== MODAIS ========== -->
+
+    <!-- Modal Receita -->
+    <div class="modal hidden" id="incomeModal">
         <div class="modal-content">
-            <h2>Nova Meta</h2>
+            <h2><i class="fas fa-plus-circle"></i> Nova Receita</h2>
             <div class="form-group">
-                <label for="goalName">Nome da Meta</label>
-                <input type="text" id="goalName" placeholder="Ex: Aluguel, Viagem, Notebook">
+                <label for="incomeAmount">Valor (R$)</label>
+                <input type="number" id="incomeAmount" placeholder="0,00" step="0.01" min="0">
             </div>
             <div class="form-group">
-                <label for="goalCategory">Categoria</label>
-                <select id="goalCategory">
-                    <option value="needs">🏠 Necessidades (50%)</option>
-                    <option value="wants">🎉 Desejos (30%)</option>
-                    <option value="savings">💰 Investimentos (20%)</option>
+                <label for="incomeCategory">Categoria</label>
+                <select id="incomeCategory">
+                    <option value="uber">Uber</option>
+                    <option value="99">99</option>
+                    <option value="freelance">Freelance</option>
+                    <option value="service">Prestação de Serviço</option>
+                    <option value="sale">Venda</option>
+                    <option value="salary">Salário</option>
+                    <option value="pix">PIX</option>
+                    <option value="transfer">Transferência</option>
+                    <option value="other">Outros</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="incomeWallet">Carteira</label>
+                <select id="incomeWallet">
+                    <option value="main">Principal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="incomeDescription">Descrição</label>
+                <input type="text" id="incomeDescription" placeholder="Ex: Corrida Uber">
+            </div>
+            <div class="form-group">
+                <label for="incomeDate">Data</label>
+                <input type="date" id="incomeDate">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveIncomeBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelIncomeBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Despesa -->
+    <div class="modal hidden" id="expenseModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-minus-circle"></i> Nova Despesa</h2>
+            <div class="form-group">
+                <label for="expenseAmount">Valor (R$)</label>
+                <input type="number" id="expenseAmount" placeholder="0,00" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label for="expenseCategory">Categoria</label>
+                <select id="expenseCategory">
+                    <option value="house">Casa</option>
+                    <option value="fuel">Combustível</option>
+                    <option value="market">Mercado</option>
+                    <option value="food">Alimentação</option>
+                    <option value="health">Saúde</option>
+                    <option value="college">Faculdade</option>
+                    <option value="leisure">Lazer</option>
+                    <option value="internet">Internet</option>
+                    <option value="tools">Ferramentas</option>
+                    <option value="taxes">Impostos</option>
+                    <option value="phone">Telefone</option>
+                    <option value="installments">Parcelas</option>
+                    <option value="other">Outros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseWallet">Carteira</label>
+                <select id="expenseWallet">
+                    <option value="main">Principal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="expenseDescription">Descrição</label>
+                <input type="text" id="expenseDescription" placeholder="Ex: Gasolina">
+            </div>
+            <div class="form-group">
+                <label for="expenseDate">Data</label>
+                <input type="date" id="expenseDate">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveExpenseBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelExpenseBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Meta -->
+    <div class="modal hidden" id="goalModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-bullseye"></i> Nova Meta</h2>
+            <div class="form-group">
+                <label for="goalName">Nome da Meta</label>
+                <input type="text" id="goalName" placeholder="Ex: Notebook novo">
             </div>
             <div class="form-group">
                 <label for="goalAmount">Valor da Meta (R$)</label>
-                <input type="number" id="goalAmount" placeholder="15000" step="0.01" min="0" inputmode="decimal">
+                <input type="number" id="goalAmount" placeholder="5000.00" step="0.01" min="0">
             </div>
             <div class="form-group">
-                <label for="goalDate">Data Desejada (opcional)</label>
+                <label for="goalDate">Data Desejada</label>
                 <input type="date" id="goalDate">
             </div>
             <div class="form-group">
-                <label for="goalPriority">Prioridade</label>
-                <select id="goalPriority">
-                    <option value="high">Alta</option>
-                    <option value="medium" selected>Média</option>
-                    <option value="low">Baixa</option>
+                <label for="goalIcon">Ícone</label>
+                <select id="goalIcon">
+                    <option value="laptop">Tecnologia</option>
+                    <option value="car">Veículo</option>
+                    <option value="plane">Viagem</option>
+                    <option value="home">Casa</option>
+                    <option value="book">Estudo</option>
+                    <option value="chart-line">Investimento</option>
+                    <option value="gamepad">Lazer</option>
+                    <option value="gift">Presente</option>
+                    <option value="mobile">Eletrônicos</option>
+                    <option value="heart">Saúde</option>
+                    <option value="star">Outro</option>
                 </select>
-            </div>
-            <div class="form-group">
-                <label for="goalType">Tipo de Economia</label>
-                <select id="goalType">
-                    <option value="percentage">Percentual da categoria</option>
-                    <option value="fixed">Valor fixo por cálculo</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="goalValue">Percentual a economizar (%)</label>
-                <input type="number" id="goalValue" placeholder="Ex: 30" min="0" max="100" inputmode="decimal">
-                <small style="color: var(--text-secondary); font-size: 0.8rem;">% do valor da categoria será destinado a esta meta</small>
             </div>
             <div class="modal-buttons">
-                <button class="btn-primary" id="saveGoalBtn">Salvar</button>
+                <button class="btn-primary" id="saveGoalBtn">Criar Meta</button>
                 <button class="btn-secondary" id="cancelGoalBtn">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal Simulador -->
-    <div class="modal hidden" id="simulatorModal">
+    <!-- Modal Conta -->
+    <div class="modal hidden" id="billModal">
         <div class="modal-content">
-            <h2>Simulador</h2>
-            <div id="simulatorContent"></div>
-            <div class="modal-buttons">
-                <button class="btn-primary" id="closeSimulatorBtn">Fechar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Editar Meta -->
-    <div class="modal hidden" id="editGoalModal">
-        <div class="modal-content">
-            <h2>Editar Meta</h2>
+            <h2><i class="fas fa-calendar-alt"></i> Nova Conta</h2>
             <div class="form-group">
-                <label for="editGoalName">Nome</label>
-                <input type="text" id="editGoalName">
+                <label for="billName">Nome da Conta</label>
+                <input type="text" id="billName" placeholder="Ex: Aluguel">
             </div>
             <div class="form-group">
-                <label for="editGoalCategory">Categoria</label>
-                <select id="editGoalCategory">
-                    <option value="needs">🏠 Necessidades</option>
-                    <option value="wants">🎉 Desejos</option>
-                    <option value="savings">💰 Investimentos</option>
-                </select>
+                <label for="billAmount">Valor (R$)</label>
+                <input type="number" id="billAmount" placeholder="0.00" step="0.01" min="0">
             </div>
             <div class="form-group">
-                <label for="editGoalAmount">Valor (R$)</label>
-                <input type="number" id="editGoalAmount" step="0.01" min="0" inputmode="decimal">
+                <label for="billDueDate">Data de Vencimento</label>
+                <input type="date" id="billDueDate">
             </div>
             <div class="form-group">
-                <label for="editGoalDate">Data Desejada</label>
-                <input type="date" id="editGoalDate">
-            </div>
-            <div class="form-group">
-                <label for="editGoalPriority">Prioridade</label>
-                <select id="editGoalPriority">
-                    <option value="high">Alta</option>
-                    <option value="medium">Média</option>
-                    <option value="low">Baixa</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="editGoalType">Tipo</label>
-                <select id="editGoalType">
-                    <option value="percentage">Percentual</option>
-                    <option value="fixed">Valor fixo</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="editGoalValue">Percentual (%)</label>
-                <input type="number" id="editGoalValue" min="0" max="100" inputmode="decimal">
-            </div>
-            <div class="modal-buttons">
-                <button class="btn-primary" id="saveGoalEditBtn">Salvar</button>
-                <button class="btn-secondary" id="cancelGoalEditBtn">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Editar Histórico -->
-    <div class="modal hidden" id="editModal">
-        <div class="modal-content">
-            <h2>Editar Cálculo</h2>
-            <div class="form-group">
-                <label>Valor (R$)</label>
-                <input type="number" id="editAmount" step="0.01" min="0" inputmode="decimal">
-            </div>
-            <div class="form-group">
-                <label>Tipo de Ganho</label>
-                <select id="editIncomeType">
-                    <option value="daily">Diário</option>
+                <label for="billRecurrence">Recorrência</label>
+                <select id="billRecurrence">
+                    <option value="monthly">Mensal</option>
                     <option value="weekly">Semanal</option>
                     <option value="biweekly">Quinzenal</option>
-                    <option value="monthly">Mensal</option>
-                    <option value="other">Outro</option>
+                    <option value="yearly">Anual</option>
                 </select>
             </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" id="saveBillBtn">Salvar</button>
+                <button class="btn-secondary" id="cancelBillBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Carteira -->
+    <div class="modal hidden" id="walletModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-wallet"></i> Nova Carteira</h2>
             <div class="form-group">
-                <label>Descrição</label>
-                <input type="text" id="editDescription">
+                <label for="walletName">Nome da Carteira</label>
+                <input type="text" id="walletName" placeholder="Ex: Carteira, PIX, Uber">
+            </div>
+            <div class="form-group">
+                <label for="walletIcon">Ícone</label>
+                <select id="walletIcon">
+                    <option value="money-bill">Dinheiro</option>
+                    <option value="bank">Banco</option>
+                    <option value="mobile-alt">PIX</option>
+                    <option value="car">Uber</option>
+                    <option value="taxi">99</option>
+                    <option value="credit-card">Cartão</option>
+                    <option value="ellipsis-h">Outro</option>
+                </select>
             </div>
             <div class="modal-buttons">
-                <button class="btn-primary" id="saveEditBtn">Salvar</button>
-                <button class="btn-secondary" id="cancelEditBtn">Cancelar</button>
+                <button class="btn-primary" id="saveWalletBtn">Criar Carteira</button>
+                <button class="btn-secondary" id="cancelWalletBtn">Cancelar</button>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="mentor.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
