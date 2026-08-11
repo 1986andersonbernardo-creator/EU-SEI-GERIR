@@ -42,6 +42,13 @@
                                    placeholder="0,00" inputmode="decimal" 
                                    autocomplete="off" aria-label="Quanto você ganhou hoje?">
                         </div>
+
+                        <!-- Origem do Ganho -->
+                        <div class="form-group">
+                            <label for="incomeSource">Como você ganhou?</label>
+                            <input type="text" id="incomeSource" placeholder="Ex: Freelance, Venda, Salário..." autocomplete="off">
+                        </div>
+
                         <button class="btn-calculate" id="calculateBtn">
                             <i class="fas fa-calculator"></i>
                             Calcular
@@ -108,33 +115,10 @@
 
                         <!-- Detalhes do Registro -->
                         <div class="record-details-card">
-                            <div class="form-group">
-                                <label for="incomeSource">Como você ganhou?</label>
-                                <select id="incomeSource">
-                                    <option value="app-driver">🚗 Motorista de aplicativo</option>
-                                    <option value="delivery">🛵 Entregas</option>
-                                    <option value="freelance">💼 Freelance</option>
-                                    <option value="service">🛠️ Prestação de serviço</option>
-                                    <option value="sale">🏪 Venda</option>
-                                    <option value="salary">💰 Salário</option>
-                                    <option value="pix">📱 PIX</option>
-                                    <option value="other">📦 Outros</option>
-                                </select>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="startTime">Início</label>
-                                    <input type="time" id="startTime">
-                                </div>
-                                <div class="form-group">
-                                    <label for="endTime">Término</label>
-                                    <input type="time" id="endTime">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="recordDate">Data</label>
-                                <input type="date" id="recordDate">
-                            </div>
+                            <button class="btn-share" id="shareBtn" onclick="shareApp()">
+                                <i class="fas fa-share-alt"></i>
+                                Compartilhar
+                            </button>
                         </div>
 
                         <!-- Ação de Guardar -->
@@ -197,6 +181,9 @@
                         <p class="goal-connection-percent" id="goalConnectionPercent">0% concluído</p>
                         <p class="goal-connection-remaining" id="goalConnectionRemaining">Faltam R$ 0,00</p>
                     </div>
+
+                    <!-- Banner de Anúncio (AdMob) — isolado da lógica financeira -->
+                    <div class="ad-banner-container" id="adBannerContainer"></div>
                 </div>
             </div>
         </div>
@@ -400,26 +387,7 @@
             </div>
             <div class="form-group">
                 <label for="editIncomeSource">Como você ganhou?</label>
-                <select id="editIncomeSource">
-                    <option value="app-driver">🚗 Motorista de aplicativo</option>
-                    <option value="delivery">🛵 Entregas</option>
-                    <option value="freelance">💼 Freelance</option>
-                    <option value="service">🛠️ Prestação de serviço</option>
-                    <option value="sale">🏪 Venda</option>
-                    <option value="salary">💰 Salário</option>
-                    <option value="pix">📱 PIX</option>
-                    <option value="other">📦 Outros</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="editStartTime">Início</label>
-                    <input type="time" id="editStartTime">
-                </div>
-                <div class="form-group">
-                    <label for="editEndTime">Término</label>
-                    <input type="time" id="editEndTime">
-                </div>
+                <input type="text" id="editIncomeSource" placeholder="Ex: Freelance, Venda, Salário..." autocomplete="off">
             </div>
             <div class="form-group">
                 <label for="editDate">Data</label>
@@ -454,6 +422,7 @@
     <script src="storage.js"></script>
     <script src="calculations.js"></script>
     <script src="messages.js"></script>
+    <script src="ads.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

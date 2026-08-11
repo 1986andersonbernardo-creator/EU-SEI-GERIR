@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Restaurar resultado se já houver registros hoje
     restoreTodayResult();
+    
+    // Inicializar banner de anúncios (isolado da lógica financeira)
+    initBannerAd();
 });
 
 // ==================== NAVEGAÇÃO ====================
@@ -345,13 +348,11 @@ function handleSaveToday() {
     }
     
     const distribution = Calculations.calculateDistribution(earnedCentavos);
-    const date = document.getElementById('recordDate').value || new Date().toISOString().split('T')[0];
+    const date = document.getElementById('recordDate')?.value || new Date().toISOString().split('T')[0];
     const now = new Date().toISOString();
     
-    // Obter origem e horários
-    const incomeSource = document.getElementById('incomeSource').value || 'other';
-    const startTime = document.getElementById('startTime').value || '';
-    const endTime = document.getElementById('endTime').value || '';
+    // Obter origem do ganho
+    const incomeSource = document.getElementById('incomeSource').value || 'Outros';
     
     // Verificar se é o primeiro registro do usuário
     const isFirstRecord = StorageManager.getAllRecords().length === 0;
@@ -362,8 +363,6 @@ function handleSaveToday() {
         date: date,
         income: earnedCentavos,
         incomeSource: incomeSource,
-        startTime: startTime,
-        endTime: endTime,
         suggestedSavings: distribution.save,
         actualSavings: actualSavings,
         createdAt: now,
@@ -432,13 +431,11 @@ function handleSaveToday() {
 function clearRecordForm() {
     const amountInput = document.getElementById('dailyAmount');
     const actualSaveInput = document.getElementById('actualSaveAmount');
-    const startTime = document.getElementById('startTime');
-    const endTime = document.getElementById('endTime');
+    const incomeSource = document.getElementById('incomeSource');
     
     if (amountInput) amountInput.value = '';
     if (actualSaveInput) actualSaveInput.value = '';
-    if (startTime) startTime.value = '';
-    if (endTime) endTime.value = '';
+    if (incomeSource) incomeSource.value = '';
 }
 
 /**
@@ -454,13 +451,11 @@ function handleSkip() {
     }
     
     const distribution = Calculations.calculateDistribution(earnedCentavos);
-    const date = document.getElementById('recordDate').value || new Date().toISOString().split('T')[0];
+    const date = document.getElementById('recordDate')?.value || new Date().toISOString().split('T')[0];
     const now = new Date().toISOString();
     
-    // Obter origem e horários
-    const incomeSource = document.getElementById('incomeSource').value || 'other';
-    const startTime = document.getElementById('startTime').value || '';
-    const endTime = document.getElementById('endTime').value || '';
+    // Obter origem do ganho
+    const incomeSource = document.getElementById('incomeSource').value || 'Outros';
     
     // Adicionar registro sem valor guardado
     StorageManager.addRecord({
@@ -468,8 +463,6 @@ function handleSkip() {
         date: date,
         income: earnedCentavos,
         incomeSource: incomeSource,
-        startTime: startTime,
-        endTime: endTime,
         suggestedSavings: distribution.save,
         actualSavings: 0,
         createdAt: now,
@@ -789,7 +782,7 @@ function renderRecentRecords() {
         
         const recordsHtml = day.records.map(record => {
             const source = getSourceLabel(record.incomeSource);
-            const timeStr = record.startTime ? record.startTime + (record.endTime ? ' - ' + record.endTime : '') : formatTimeLabel(record.createdAt);
+            const timeStr = formatTimeLabel(record.createdAt);
             
             return '' +
                 '<div class="record-sub-item">' +
@@ -841,7 +834,7 @@ function renderHistoryScreen() {
         
         const recordsHtml = day.records.map(record => {
             const source = getSourceLabel(record.incomeSource);
-            const timeStr = record.startTime ? record.startTime + (record.endTime ? ' - ' + record.endTime : '') : formatTimeLabel(record.createdAt);
+            const timeStr = formatTimeLabel(record.createdAt);
             
             return '' +
                 '<div class="history-record-item">' +
@@ -894,9 +887,7 @@ function openEditRecordModal(recordId) {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
-    document.getElementById('editIncomeSource').value = record.incomeSource || 'other';
-    document.getElementById('editStartTime').value = record.startTime || '';
-    document.getElementById('editEndTime').value = record.endTime || '';
+    document.getElementById('editIncomeSource').value = record.incomeSource || 'Outros';
     document.getElementById('editDate').value = record.date;
     document.getElementById('editActualSavings').value = (record.actualSavings / 100).toLocaleString('pt-BR', {
         minimumFractionDigits: 2,
@@ -928,16 +919,12 @@ function handleSaveEdit() {
     
     const actualSavings = getInputCentavos('editActualSavings');
     const incomeSource = document.getElementById('editIncomeSource').value;
-    const startTime = document.getElementById('editStartTime').value;
-    const endTime = document.getElementById('editEndTime').value;
     const date = document.getElementById('editDate').value;
     
     // Atualizar registro
     StorageManager.updateRecord(editingRecordId, {
         income: income,
         incomeSource: incomeSource,
-        startTime: startTime,
-        endTime: endTime,
         date: date,
         actualSavings: actualSavings
     });
@@ -1018,12 +1005,11 @@ function handleConfirmDelete() {
  * @param {string} sourceKey - Chave da origem
  * @returns {string} Label formatado
  */
-function getSourceLabel(sourceKey) {
-    const source = INCOME_SOURCES[sourceKey];
-    if (source) {
-        return source.emoji + ' ' + source.label;
+function getSourceLabel(sourceText) {
+    if (sourceText && sourceText.trim() !== '') {
+        return sourceText;
     }
-    return '📦 Outros';
+    return 'Outros';
 }
 
 /**
@@ -1097,6 +1083,31 @@ function animateGoalCard() {
     
     card.classList.add('pulse-animation');
     setTimeout(() => card.classList.remove('pulse-animation'), 600);
+}
+
+// ==================== ANÚNCIOS ====================
+
+/**
+ * Inicializa o banner de anúncios (AdMob).
+ * Isolado da lógica financeira — falhas não afetam o funcionamento do app.
+ * 
+ * Lógica de exibição:
+ * - showAds == false → não mostrar anúncio
+ * - isProUser == true → não mostrar anúncio
+ * - caso contrário → mostrar BannerAd
+ */
+function initBannerAd() {
+    try {
+        if (typeof BannerAd === 'undefined') return;
+        
+        const banner = new BannerAd('adBannerContainer');
+        banner.init();
+        
+        // Disponibilizar globalmente para controle futuro (PRO, refresh, etc.)
+        window.appBannerAd = banner;
+    } catch (e) {
+        console.warn('[BannerAd] Não foi possível inicializar:', e);
+    }
 }
 
 // ==================== EVENTOS ====================

@@ -12,9 +12,7 @@ const STORAGE_KEY = 'euSeiGerir_v2';
 //             id: 'rec_1723300000000',  // ID único
 //             date: '2026-08-10',       // Data no formato YYYY-MM-DD
 //             income: 22000,            // Valor ganho em centavos (inteiro)
-//             incomeSource: 'app-driver', // Origem do ganho
-//             startTime: '06:00',       // Horário de início (opcional)
-//             endTime: '12:30',         // Horário de término (opcional)
+//             incomeSource: 'Freelance', // Origem do ganho (texto livre)
 //             suggestedSavings: 4400,   // Valor sugerido para guardar (centavos)
 //             actualSavings: 4400,      // Valor efetivamente guardado (centavos)
 //             createdAt: '2026-08-10T12:00:00.000Z',
@@ -529,9 +527,7 @@ function migrateOldData() {
                         id: 'migrated_' + t.id + '_' + Date.now(),
                         date: date,
                         income: income,
-                        incomeSource: t.category || 'other',
-                        startTime: '',
-                        endTime: '',
+                        incomeSource: t.category || 'Outros',
                         suggestedSavings: suggestedSavings,
                         actualSavings: 0,
                         createdAt: t.createdAt || new Date(date + 'T12:00:00.000Z').toISOString(),
