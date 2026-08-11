@@ -3,7 +3,7 @@
 const BRAND = {
     name: 'Eu Sei Gerir',
     tagline: 'Guarde um pouco todo dia',
-    url: 'https://eseigerir.app',
+    url: 'https://eu-sei-gerir.vercel.app/',
     shareMessage: `💰 Estou usando o Eu Sei Gerir para guardar um pouco todo dia e alcançar meus objetivos.
 
 Ele me ajuda a perceber que pequenas quantias viram grandes conquistas.

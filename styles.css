@@ -889,6 +889,13 @@ input[type="date"]:focus {
     margin-top: var(--space-1);
 }
 
+.goal-create-btn {
+    margin-top: var(--space-4);
+    min-height: 48px;
+    padding: var(--space-4);
+    font-size: var(--text-sm);
+}
+
 /* ============================================
    CARDS GENÉRICOS
    ============================================ */

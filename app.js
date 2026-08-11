@@ -562,6 +562,8 @@ function renderGoalConnection() {
     
     if (!connectionCard) return;
     
+    const homeCreateGoalBtn = document.getElementById('homeCreateGoalBtn');
+    
     if (!goal) {
         setText('goalConnectionName', 'Defina um objetivo');
         setText('goalConnectionProgress', 'Toque em Objetivo para começar');
@@ -570,8 +572,14 @@ function renderGoalConnection() {
         
         const fill = document.getElementById('goalConnectionFill');
         if (fill) fill.style.width = '0%';
+        
+        // Mostrar botão de criar objetivo na tela inicial
+        if (homeCreateGoalBtn) homeCreateGoalBtn.classList.remove('hidden');
         return;
     }
+    
+    // Ocultar botão de criar objetivo quando já existe um
+    if (homeCreateGoalBtn) homeCreateGoalBtn.classList.add('hidden');
     
     const progress = Calculations.calculateGoalProgress(goal);
     const remaining = goal.amount - goal.saved;
@@ -1273,5 +1281,6 @@ function fallbackCopyToClipboard(text) {
 // Exportar funções globais para uso em HTML
 window.navigateTo = navigateTo;
 window.shareApp = shareApp;
+window.openGoalModal = openGoalModal;
 window.openEditRecordModal = openEditRecordModal;
 window.openDeleteConfirm = openDeleteConfirm;
